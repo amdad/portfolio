@@ -1,0 +1,15 @@
+{
+    "name"       : "devface/portfolio",
+    "type"       : "project",
+    "authors"    : [
+        {
+            "name": "Kristof Feys",
+            "email": "kristof.feys@me.com"
+        }
+    ],
+
+    "require": {
+        "php": ">=5.4.0",
+        "silex/silex": "~1.2"
+    }
+}
