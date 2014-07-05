@@ -44,7 +44,7 @@ vendor/*
 */logs/*
 */cache/*
 */backups/*
-db/*
+cockpit/storage/*
 
 # Composer
 composer.phar
