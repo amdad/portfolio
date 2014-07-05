@@ -16,7 +16,7 @@ error_reporting(-1);
 	<body>
 	<div class="units-row">
         	<div class="unit-30">
-        	sidebar
+        	 ---- sidebar ----
             	<!-- sidebar -->
         	</div>
         	<div class="unit-70">
