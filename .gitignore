@@ -39,7 +39,7 @@ Thumbs.db
 ######################
 
 
-# Symfony directories
+# Project directories
 vendor/*
 */logs/*
 */cache/*
