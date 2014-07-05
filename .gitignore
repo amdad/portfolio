@@ -35,21 +35,15 @@ ehthumbs.db
 Thumbs.db
 
 
-# Symfony2 Specific #
-#####################
+#  Project Specific  #
+######################
 
-# Bootstrap
-app/bootstrap*
 
 # Symfony directories
 vendor/*
 */logs/*
 */cache/*
-web/uploads/*
-web/bundles/*
-
-# Configuration files
-cockpit/storage/*
+*/backups/*
 
 # Composer
 composer.phar
