@@ -10,13 +10,13 @@ $app['debug'] = true;
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/views',
 ));
-$app->get('/topnav', function () use ($app) {
+$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $nav = collection("Pages")->find(["navigation"=>true])->toArray();
 
-    return $app['twig']->render('tmpl/topnav.twig', array(
-        'nav' => $nav,
-    ));
-});
+    $twig->addGlobal('nav', $nav);
+
+    return $twig;
+}));
 
 $app->get('/', function () use ($app) {
     $data = collection("Pages")->findOne(["title"=>"home"]);
