@@ -3,9 +3,10 @@
 {% block content %}
 <div class="units-row">
 	<div class="unit-100">
+	{{ dump(data) }}
     	<hgroup>
-    		<h1>{{ data['title'] }}</h1>
-    		<h1 class="subheading">{{ data['subtitle'] }}</h1>
+    		<h1>{# data['title'] #}</h1>
+    		<h1 class="subheading">{# data['subtitle'] #}</h1>
 		</hgroup>
 	</div>
 </div>
