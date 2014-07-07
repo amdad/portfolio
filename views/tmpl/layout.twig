@@ -1,6 +1,6 @@
 {{ include('head.twig') }}
 
-{% render('/topnav') %}
+{{ render(app.request.baseUrl ~ '/topnav') }}
 
 {% block content %}{% endblock %}
 
