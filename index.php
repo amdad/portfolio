@@ -49,5 +49,13 @@ $app->get('/blog/{postslug}', function ($postslug) use ($app) {
     ));
 });
 
+$app->error(function (\Exception $e, $code) use ($app) {
+    if ($app['debug']) {
+        return;
+    }
+
+    // ... logic to handle the error and return a Response
+});
+
 $app->run();
 ?>
