@@ -19,7 +19,7 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 }));
 
 $app->get('/', function () use ($app) {
-    $data = collection("Pages")->findOne(["title"=>"home"]);
+    $data = collection("Pages")->findOne(["Title_slug"=>"home"]);
 
     return $app['twig']->render('page.twig', array(
         'data' => $data,
