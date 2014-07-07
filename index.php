@@ -1,38 +1,55 @@
 <?php
-error_reporting(-1);
+$app['debug'] = true;
 
-	require_once("cockpit/bootstrap.php");
+require_once __DIR__.'/cockpit/bootstrap.php';
+require_once __DIR__.'/vendor/autoload.php';
+
+$app = new Silex\Application();
+
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+    'twig.path' => __DIR__.'/views',
+));
+
+
+$app->get('/', function () use ($app) {
+    $data = collection("Pages")->findOne(["title"=>"home"]);
+    $nav = collection("Pages")->find(["navigation"=>true])->toArray();
+
+    return $app['twig']->render('page.twig', array(
+        'data' => $data,
+        'nav' => $nav,
+    ));
+});
+
+$app->get('/{pageslug}', function ($pageslug) use ($app) {
+    $data = collection("Pages")->findOne(["title"=>$pageslug]);
+    $nav = collection("Pages")->find(["navigation"=>true])->toArray();
+
+    return $app['twig']->render('page.twig', array(
+        'data' => $data,
+        'nav' => $nav,
+    ));
+});
+
+$app->get('/blog', function () use ($app) {
+    $data = collection("blog")->toArray();
+    $nav = collection("Pages")->find(["navigation"=>true])->toArray();
+
+    return $app['twig']->render('page.twig', array(
+        'data' => $data,
+        'nav' => $nav,
+    ));
+});
+
+$app->get('/blog/{postslug}', function ($postslug) use ($app) {
+    $data = collection("blog")->findOne(["title"=>$postslug]);
+    $nav = collection("Pages")->find(["navigation"=>true])->toArray();
+
+    return $app['twig']->render('page.twig', array(
+        'data' => $data,
+        'nav' => $nav,
+    ));
+});
+
+$app->run();
 ?>
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>DevFace</title>
-		
-		<meta charset="utf-8" />
-    		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    		<link rel="stylesheet" href="css/kube.min.css" />
-	</head>
-	<body>
-	<div class="units-row">
-        	<div class="unit-30">
-        	 SIDEBAR, NOICE
-            	<!-- sidebar -->
-        	</div>
-        	<div class="unit-70">
-        	<?php 
-    $items = collection("Pages")->find(function($page){
-      return ($page["navigation"] === true);
-    })->toArray();
-  ?>
-    <?php foreach($items as $item): ?>
-     <div>
-         <?php var_dump($item);?>
-     </div>
-  <?php endforeach;?>
-        	content
-            	<!-- content -->
-        	</div>
-    	</div>
-	</body>
-</html>
