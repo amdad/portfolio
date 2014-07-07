@@ -1,10 +1,11 @@
 <?php
-$app['debug'] = true;
-
 require_once __DIR__.'/cockpit/bootstrap.php';
 require_once __DIR__.'/vendor/autoload.php';
 
 $app = new Silex\Application();
+
+error_reporting(-1);
+$app['debug'] = true;
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/views',
