@@ -1,9 +1,18 @@
-{{ dump(nav) }}
 
 <header class="group">
     <nav class="navbar navbar-left">
         <ul>
-            <li>...</li>
+            {% for item in nav %}
+                {% if item.Title_slug is defined %}
+                    {% if item.Title_slug == "home" %}
+                        <li><a href="/">{{ item.Title_slug }}</a></li>
+                    {% else %}
+                        <li><a href="/{{ item.Title_slug }}">{{ item.Title }}</a></li>
+                    {% endif %}
+                {% else %}
+                    <li><a href="/{{ item.Title }}">{{ item.Title }}</a></li>
+                {% endif %}
+            {% endfor %}
         </ul>
     </nav>
     <nav class="navbar navbar-right">

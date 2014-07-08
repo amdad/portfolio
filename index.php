@@ -9,6 +9,7 @@ $app['debug'] = true;
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/views',
+    'twig.options' => array('strict_variables' => false ),
 ));
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $nav = collection("Pages")->find(["navigation"=>true])->toArray();
@@ -17,6 +18,9 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 
     return $twig;
 }));
+
+
+
 
 $app->get('/', function () use ($app) {
     $data = collection("Pages")->findOne(["Title_slug"=>"home"]);
@@ -30,8 +34,11 @@ $app->get('/cockpit', function () use ($app) {
 });
 
 $app->get('/{pageslug}', function ($pageslug) use ($app) {
-    $data = collection("Pages")->findOne(["title"=>$pageslug]);
-
+    $data = collection("Pages")->findOne(["Title"=>$pageslug]);
+    if ($data === null){
+        $data = collection("Pages")->findOne(["Title_slug"=>$pageslug]);
+    }
+    var_dump($data);
     return $app['twig']->render('page.twig', array(
         'data' => $data,
     ));
