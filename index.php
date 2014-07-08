@@ -38,7 +38,6 @@ $app->get('/{pageslug}', function ($pageslug) use ($app) {
     if ($data === null){
         $data = collection("Pages")->findOne(["Title_slug"=>$pageslug]);
     }
-    var_dump($data);
     return $app['twig']->render('page.twig', array(
         'data' => $data,
     ));
