@@ -1,6 +1,7 @@
 {
     "name"       : "devface/portfolio",
     "type"       : "project",
+    "description": "Portfolio DevFace 2014",
     "authors"    : [
         {
             "name": "Kristof Feys",
