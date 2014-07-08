@@ -25,6 +25,9 @@ $app->get('/', function () use ($app) {
         'data' => $data,
     ));
 });
+$app->get('/cockpit', function () use ($app) {
+    return $app->redirect('/cockpit/index.php');
+});
 
 $app->get('/{pageslug}', function ($pageslug) use ($app) {
     $data = collection("Pages")->findOne(["title"=>$pageslug]);
