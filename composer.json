@@ -2,6 +2,7 @@
     "name"       : "devface/portfolio",
     "type"       : "project",
     "description": "Portfolio DevFace 2014",
+    "license"    : "proprietary",
     "authors"    : [
         {
             "name": "Kristof Feys",
