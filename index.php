@@ -8,12 +8,11 @@ error_reporting(-1);
 $app['debug'] = true;
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__.'/views',
+    'twig.path' => __DIR__.'/assets/views',
     'twig.options' => array('strict_variables' => false ),
 ));
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $nav = collection("Pages")->find(["navigation"=>true])->toArray();
-
     $twig->addGlobal('nav', $nav);
 
     return $twig;

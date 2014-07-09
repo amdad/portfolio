@@ -2,6 +2,10 @@
 
 {{ include('tmpl/topnav.twig') }}
 
-{% block content %}{% endblock %}
+<div class="header"></div>
+
+<div class="container-fluid">
+	{% block content %}{% endblock %}
+</div>
 
 {{ include('tmpl/footer.twig') }}
