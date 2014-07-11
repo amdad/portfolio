@@ -4,8 +4,51 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6d13a6554150ff31251f59316e995c8e",
+    "hash": "eedd1b6b1cafc478b62c511d431e7ec3",
     "packages": [
+        {
+            "name": "aheinze/cockpit",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aheinze/cockpit.git",
+                "reference": "c8a26b8d08f4673fcfa5ee778dc613870c566d61"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aheinze/cockpit/zipball/c8a26b8d08f4673fcfa5ee778dc613870c566d61",
+                "reference": "c8a26b8d08f4673fcfa5ee778dc613870c566d61",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "project",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Artur Heinze",
+                    "email": "artur@agentejo.com",
+                    "homepage": "http://agentejo.com"
+                }
+            ],
+            "description": "An api-driven CMS without forcing you to make compromises in how you implement your site.",
+            "homepage": "http://getcockpit.com",
+            "keywords": [
+                "api",
+                "cms",
+                "nosql"
+            ],
+            "time": "2014-07-10 14:49:24"
+        },
         {
             "name": "pimple/pimple",
             "version": "v1.1.1",
@@ -91,6 +134,52 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "raveren/kint",
+            "version": "v0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/raveren/kint.git",
+                "reference": "ada810111ced4e3a926b4040da9b86442e43b613"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/raveren/kint/zipball/ada810111ced4e3a926b4040da9b86442e43b613",
+                "reference": "ada810111ced4e3a926b4040da9b86442e43b613",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "Kint.class.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rokas Šleinius",
+                    "homepage": "https://github.com/raveren"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/raveren/kint/contributors"
+                }
+            ],
+            "description": "Kint - debugging helper for PHP developers",
+            "homepage": "https://github.com/raveren/kint",
+            "keywords": [
+                "debug",
+                "kint",
+                "php"
+            ],
+            "time": "2013-08-12 22:46:16"
         },
         {
             "name": "silex/silex",
@@ -555,9 +644,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "aheinze/cockpit": 20
+    },
     "platform": {
         "php": ">=5.4.0"
     },

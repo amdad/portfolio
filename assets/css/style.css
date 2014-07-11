@@ -1,23 +1,101 @@
+@import url(http://fonts.googleapis.com/css?family=Oswald:400,300);
+@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css);
+
+body{
+	font-family: "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.top-nav.navbar{
+  height: 30px;
+  min-height:30px;
+  line-height: 20px;
+  padding:5px;
+  background-color: #EC6F66;
+  color:#FFF;
+  border-radius:0;
+  letter-spacing:1px;
+  font-weight: 300;
+}
+.top-nav .navbar-nav>li>a{
+	padding:5px 10px;
+	margin-top:-6px;
+	color:#FFF;
+}
+.top-nav .navbar-nav>li>a:hover{
+	background-color:#FFF;
+	color:#EC6F66;
+}
+.top-nav .last{
+	margin-left:15px;
+}
+
+.affix {
+  top: 0;
+  width:100%;
+}
+.affix + .header{
+	margin-top:0px;
+}
+.navbar-brand img{
+	display:inline-block;
+	float:left;
+	padding-right:10px;
+	margin-top:-4px;
+	max-height:40px;
+}
+.navbar-brand{
+	padding:15px;
+	line-height:20px;
+	padding-top:17px;
+	text-transform: uppercase;
+	font-size:1.4em;
+}
+.navbar-brand small{
+	font-family: "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: 100;
+	display:block;
+  	font-size:0.7em;
+  	text-transform: none;
+}
+
+.header{
+	background-image:url('http://www.devface.be/img/park-place.jpg');
+	background-size: cover;
+	background-position:center;
+	margin-top:-70px;
+}
+
 .subheading{
 	font-size:1.4em;
 	padding-top:0;
 	margin-top:0;
 	color:#bababa;
 }
-
-.navbar-brand img{
-	max-height:40px;
+#mainnav .navbar-nav>li{
+	padding-left:15px;
+	padding-right:15px;
 }
-.navbar-brand{
-	padding:15px;
+.navbar-default{
+	z-index:9999;
+	border-radius:0;
+	border-left:none;
+	border-right:none;
+	border-top:none;
 }
-.navbar-nav>li>a{
+#mainnav .navbar-nav>li>a{
 	line-height:40px;
+	padding-bottom:10px;
+	margin-bottom:5px;
+	text-transform: uppercase;
+}
+#mainnav .navbar-nav>li>a:hover{
+	border-bottom:5px solid #EC6F66;
+	margin-bottom:0;
 }
 .navbar{
 	margin-bottom:0;
 	background-color:#FFF;
 	background-color:rgba(255,255,255,0.9);
+	font-family: 'Oswald', sans-serif;
 }
 .header{
 	height:400px;

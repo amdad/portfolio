@@ -1,4 +1,21 @@
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+<nav class="top-nav navbar">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav">
+      <li><span class="glyphicon glyphicon-envelope"></span> {{ globals.email }}</li>
+      <li class="last"><span class="glyphicon glyphicon-earphone"></span> {{ globals.telephone }}</li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+                <li>Get Social: &nbsp;</li>
+                <li><a href="https://www.facebook.com/kristof.feys" id="fb"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="https://twitter.com/qreatives" id="tw"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="http://www.linkedin.com/profile/view?id=148555090" id="li"><i class="fa fa-linkedin"></i></a></li>
+                <li><a href="http://github.com/quietkillah" id="li"><i class="fa fa-github"></i></a></li>
+        <li><a href="http://stackoverflow.com/users/1435341/kristof-feys" id="so"><i class="fa fa-stack-overflow"></i></a></li>
+    </ul>
+  </div>
+</nav>
+<nav class="navbar navbar-default navbar-lower" role="navigation">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -8,13 +25,13 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#"><img src="assets/img/logo-big.png"/></a>
+      <a class="navbar-brand" href="#"><img src="assets/img/logo-big.png"/>Kristof Feys<small>Web Developer</small></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-            {% for item in nav %}
+    <div class="collapse navbar-collapse" id="mainnav">
+      <ul class="nav navbar-nav navbar-right">
+        {% for item in globals.nav %}
                 {% if item.Title_slug is defined %}
                     {% if item.Title_slug == "home" %}
                         <li><a href="/">{{ item.Title_slug|capitalize }}</a></li>
@@ -25,8 +42,6 @@
                     <li><a href="/{{ item.Title }}">{{ item.Title }}</a></li>
                 {% endif %}
             {% endfor %}
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
         <li><a href="#">CV</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->

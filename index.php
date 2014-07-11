@@ -1,22 +1,18 @@
 <?php
 require_once __DIR__.'/cockpit/bootstrap.php';
 require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'config.php';
+//$cockpit = cockpit();
+//d($cockpit);
+
 
 $app = new Silex\Application();
 
 error_reporting(-1);
 $app['debug'] = true;
 
-$app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__.'/assets/views',
-    'twig.options' => array('strict_variables' => false ),
-));
-$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
-    $nav = collection("Pages")->find(["navigation"=>true])->toArray();
-    $twig->addGlobal('nav', $nav);
-
-    return $twig;
-}));
+$app->register(new Silex\Provider\TwigServiceProvider(), $config['twig']);
+$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {$twig->addGlobal('globals', $config['globals']);return $twig;}));
 
 
 
@@ -28,11 +24,11 @@ $app->get('/', function () use ($app) {
         'data' => $data,
     ));
 });
-$app->get('/cockpit', function () use ($app) {
+$app->get('/cockpit/', function () use ($app) {
     return $app->redirect('/cockpit/index.php');
 });
 
-$app->get('/{pageslug}', function ($pageslug) use ($app) {
+$app->get('/{pageslug}/', function ($pageslug) use ($app) {
     $data = collection("Pages")->findOne(["Title"=>$pageslug]);
     if ($data === null){
         $data = collection("Pages")->findOne(["Title_slug"=>$pageslug]);
@@ -42,7 +38,7 @@ $app->get('/{pageslug}', function ($pageslug) use ($app) {
     ));
 });
 
-$app->get('/blog', function () use ($app) {
+$app->get('/blog/', function () use ($app) {
     $data = collection("blog")->toArray();
 
     return $app['twig']->render('page.twig', array(
@@ -50,7 +46,7 @@ $app->get('/blog', function () use ($app) {
     ));
 });
 
-$app->get('/blog/{postslug}', function ($postslug) use ($app) {
+$app->get('/blog/{postslug}/', function ($postslug) use ($app) {
     $data = collection("blog")->findOne(["title"=>$postslug]);
 
     return $app['twig']->render('page.twig', array(

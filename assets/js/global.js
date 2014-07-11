@@ -1,5 +1,9 @@
-// Dots and lines
-
+$(document).ready(function(){
+    $('.navbar-lower').affix({
+        offset: {top: 30}
+    });
+});
+/*
 $(function(){
 
     var header = $('.header'),
@@ -146,3 +150,4 @@ $(function(){
     ctx.drawImage(img, cx, cy, cw, ch,  x, y, w, h);
 }
 });
+*/
