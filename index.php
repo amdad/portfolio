@@ -1,9 +1,7 @@
 <?php
 require_once __DIR__.'/cockpit/bootstrap.php';
 require_once __DIR__.'/vendor/autoload.php';
-require_once __DIR__.'config.php';
-//$cockpit = cockpit();
-//d($cockpit);
+require_once __DIR__.'/config.php';
 
 
 $app = new Silex\Application();
@@ -12,7 +10,7 @@ error_reporting(-1);
 $app['debug'] = true;
 
 $app->register(new Silex\Provider\TwigServiceProvider(), $config['twig']);
-$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {$twig->addGlobal('globals', $config['globals']);return $twig;}));
+$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {global $config; $twig->addGlobal('globals', $config['globals']);return $twig;}));
 
 
 
