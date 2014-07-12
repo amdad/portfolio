@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "eedd1b6b1cafc478b62c511d431e7ec3",
+    "hash": "1f64e600192ca0d9fddbba794227554a",
     "packages": [
         {
             "name": "aheinze/cockpit",
-            "version": "dev-master",
+            "version": "0.9.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aheinze/cockpit.git",
-                "reference": "c8a26b8d08f4673fcfa5ee778dc613870c566d61"
+                "reference": "1e00eca4fb91c83a46688881ae4973a22afbaff9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aheinze/cockpit/zipball/c8a26b8d08f4673fcfa5ee778dc613870c566d61",
-                "reference": "c8a26b8d08f4673fcfa5ee778dc613870c566d61",
+                "url": "https://api.github.com/repos/aheinze/cockpit/zipball/1e00eca4fb91c83a46688881ae4973a22afbaff9",
+                "reference": "1e00eca4fb91c83a46688881ae4973a22afbaff9",
                 "shasum": ""
             },
             "require": {
@@ -47,7 +47,7 @@
                 "cms",
                 "nosql"
             ],
-            "time": "2014-07-10 14:49:24"
+            "time": "2014-06-26 09:34:30"
         },
         {
             "name": "pimple/pimple",
@@ -644,9 +644,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "aheinze/cockpit": 20
-    },
+    "stability-flags": [
+
+    ],
     "platform": {
         "php": ">=5.4.0"
     },
