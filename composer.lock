@@ -4,51 +4,8 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1f64e600192ca0d9fddbba794227554a",
+    "hash": "58e8f50c16994dff2fb872fda55f0dcc",
     "packages": [
-        {
-            "name": "aheinze/cockpit",
-            "version": "0.9.16",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/aheinze/cockpit.git",
-                "reference": "1e00eca4fb91c83a46688881ae4973a22afbaff9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/aheinze/cockpit/zipball/1e00eca4fb91c83a46688881ae4973a22afbaff9",
-                "reference": "1e00eca4fb91c83a46688881ae4973a22afbaff9",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "type": "project",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Artur Heinze",
-                    "email": "artur@agentejo.com",
-                    "homepage": "http://agentejo.com"
-                }
-            ],
-            "description": "An api-driven CMS without forcing you to make compromises in how you implement your site.",
-            "homepage": "http://getcockpit.com",
-            "keywords": [
-                "api",
-                "cms",
-                "nosql"
-            ],
-            "time": "2014-06-26 09:34:30"
-        },
         {
             "name": "pimple/pimple",
             "version": "v1.1.1",
