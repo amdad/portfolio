@@ -1,24 +1,28 @@
-{{ $app->assets(['regions:assets/regions.js','regions:assets/js/region.js'], $app['cockpit/version']) }}
+@start('header')
 
-{{ $app->assets(['assets:vendor/uikit/js/addons/nestable.min.js'], $app['cockpit/version']) }}
-{{ $app->assets(['assets:vendor/uikit/js/addons/timepicker.min.js'], $app['cockpit/version']) }}
-{{ $app->assets(['assets:vendor/uikit/js/addons/datepicker.min.js'], $app['cockpit/version']) }}
+  {{ $app->assets(['regions:assets/regions.js','regions:assets/js/region.js'], $app['cockpit/version']) }}
 
-{{ $app->assets(['assets:vendor/codemirror/codemirror.js','assets:vendor/codemirror/codemirror.css','assets:vendor/codemirror/pastel-on-dark.css'], $app['cockpit/version']) }}
+  {{ $app->assets(['assets:vendor/uikit/js/addons/nestable.min.js'], $app['cockpit/version']) }}
+  {{ $app->assets(['assets:vendor/uikit/js/addons/timepicker.min.js'], $app['cockpit/version']) }}
+  {{ $app->assets(['assets:vendor/uikit/js/addons/datepicker.min.js'], $app['cockpit/version']) }}
 
-{{ $app->assets(['assets:angular/directives/codearea.js'], $app['cockpit/version']) }}
+  {{ $app->assets(['assets:vendor/codemirror/codemirror.js','assets:vendor/codemirror/codemirror.css','assets:vendor/codemirror/pastel-on-dark.css'], $app['cockpit/version']) }}
 
-{{ $app->assets(['assets:vendor/tinymce/tinymce.min.js'], $app['cockpit/version']) }}
-{{ $app->assets(['assets:vendor/tinymce/langs/'.$app("i18n")->locale.'.js'], $app['cockpit/version']) }}
-{{ $app->assets(['assets:angular/directives/wysiwyg.js'], $app['cockpit/version']) }}
-{{ $app->assets(['assets:angular/directives/gallery.js'], $app['cockpit/version']) }}
-{{ $app->assets(['assets:angular/directives/tags.js'], $app['cockpit/version']) }}
+  {{ $app->assets(['assets:angular/directives/codearea.js'], $app['cockpit/version']) }}
 
-{{ $app->assets(['mediamanager:assets/pathpicker.directive.js'], $app['cockpit/version']) }}
+  {{ $app->assets(['assets:vendor/tinymce/tinymce.min.js'], $app['cockpit/version']) }}
+  {{ $app->assets(['assets:vendor/tinymce/langs/'.$app("i18n")->locale.'.js'], $app['cockpit/version']) }}
+  {{ $app->assets(['assets:angular/directives/wysiwyg.js'], $app['cockpit/version']) }}
+  {{ $app->assets(['assets:angular/directives/gallery.js'], $app['cockpit/version']) }}
+  {{ $app->assets(['assets:angular/directives/tags.js'], $app['cockpit/version']) }}
 
-{{ $app->assets(['assets:vendor/uikit/js/addons/htmleditor.min.js'], $app['cockpit/version']) }}
-{{ $app->assets(['assets:vendor/marked.js'], $app['cockpit/version']) }}
-{{ $app->assets(['assets:angular/directives/htmleditor.js'], $app['cockpit/version']) }}
+  {{ $app->assets(['mediamanager:assets/pathpicker.directive.js'], $app['cockpit/version']) }}
+
+  {{ $app->assets(['assets:vendor/uikit/js/addons/htmleditor.min.js'], $app['cockpit/version']) }}
+  {{ $app->assets(['assets:vendor/marked.js'], $app['cockpit/version']) }}
+  {{ $app->assets(['assets:angular/directives/htmleditor.js'], $app['cockpit/version']) }}
+
+@end('header')
 
 
 <div data-ng-controller="region" data-id="{{ $id }}" ng-cloak>
@@ -82,15 +86,15 @@
 
                         <div data-ng-show="mode=='form'">
 
-                            <div class="uk-form-row">
-                                <h3>@lang('Region fields')</h3>
-                            </div>
+                            <div class="uk-form-row uk-clearfix">
 
-                            <div class="uk-margin-bottom">
-                              <button type="button" class="uk-button" data-ng-class="manageform ? 'uk-button-success':'uk-button-primary'" data-ng-click="(manageform = !manageform)" title="@lang('Manage form')">
-                                    <span ng-show="!manageform"><i class="uk-icon-cog"></i></span>
-                                    <span ng-show="manageform"><i class="uk-icon-check"></i></span>
-                              </button>
+                                <h3 class="uk-float-left">@lang('Region fields')</h3>
+
+                                <button type="button" class="uk-button uk-button-small uk-float-right" data-ng-class="manageform ? 'uk-button-success':'uk-button-primary'" data-ng-click="(manageform = !manageform)" title="@lang('Manage form')">
+                                      <span ng-show="!manageform"><i class="uk-icon-cog"></i></span>
+                                      <span ng-show="manageform"><i class="uk-icon-check"></i></span>
+                                </button>
+
                             </div>
 
                             <div class="uk-grid">
@@ -106,7 +110,7 @@
                                          <li data-ng-repeat="field in region.fields">
                                             <div class="uk-nestable-item uk-nestable-item-table">
                                                <div class="uk-nestable-handle"></div>
-                                               <input type="text" data-ng-model="field.name" placeholder="@lang('Field name')" title="@lang('Field name')" data-uk-tooltip pattern="[a-zA-Z0-9]+" required>
+                                               <input type="text" data-ng-model="field.name" placeholder="@lang('Field name')" title="@lang('Field name')" data-uk-tooltip pattern="^[a-zA-Z][a-zA-Z0-9]*" required>
                                                <input type="text" data-ng-model="field.label" placeholder="@lang('Field label')" title="@lang('Field label')" data-uk-tooltip>
                                                <select data-ng-model="field.type" title="@lang('Field type')" data-uk-tooltip>
                                                    <option value="text">Text</option>

@@ -1,14 +1,17 @@
-{{ $app->assets(['forms:assets/forms.js','forms:assets/js/entries.js'], $app['cockpit/version']) }}
+@start('header')
 
-<style>
-    td .uk-grid+.uk-grid { margin-top: 5px; }
-</style>
+    {{ $app->assets(['forms:assets/forms.js','forms:assets/js/entries.js'], $app['cockpit/version']) }}
 
-<script>
+    <style>
+        td .uk-grid+.uk-grid { margin-top: 5px; }
+    </style>
 
-    var FORMDATA = {{ json_encode($form) }};
+    <script>
+        var FORMDATA = {{ json_encode($form) }};
+    </script>
 
-</script>
+@end('header')
+
 
 <div data-ng-controller="entries" ng-cloak>
 
@@ -19,6 +22,16 @@
             <li><a href="@route('/forms/form/'.$form["_id"])" title="@lang('Edit form')" data-uk-tooltip="{pos:'bottom'}"><i class="uk-icon-pencil"></i></a></li>
         </ul>
         @end
+
+        <div class="uk-navbar-flip">
+            @hasaccess?("Forms", 'manage.forms')
+            <div class="uk-navbar-content" data-ng-show="entries && entries.length">
+                <a class="uk-button" href="@route('/api/forms/export/'.$form['_id'])" download="{{ $form['name'] }}.json" title="@lang('Export data')" data-uk-tooltip="{pos:'bottom'}">
+                    <i class="uk-icon-share-alt"></i>
+                </a>
+            </div>
+            @end
+        </div>
     </nav>
 
     <div class="app-panel uk-margin uk-text-center" data-ng-show="entries && !entries.length">
@@ -56,7 +69,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>@@ entry.created | fmtdate:'d M, Y H:m' @@</td>
+                            <td>@@ entry.created | fmtdate:'d M, Y H:i' @@</td>
                             <td class="uk-text-right">
                                 <a href="#" data-ng-click="remove($index, entry._id)" title="@lang('Delete entry')"><i class="uk-icon-trash-o"></i></a>
                             </td>

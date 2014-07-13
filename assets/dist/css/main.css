@@ -104,3 +104,50 @@ body{
 .header canvas{
 	margin-top:-20px;
 }
+a.icon{
+	border: 1px solid #EC6F66;
+	display:block;
+	width:40%;
+	height: 0;
+	padding-bottom: 40%;
+	margin-left:25%;
+	position:relative;
+}
+a.icon .fa{
+	font-size:40px;
+	line-height: 100%;
+	width:96%;
+	text-align: center;
+	display:block;
+	margin-top:-20px;
+	position:absolute;
+	top: 50%;
+	color:#EC6F66;
+}
+a.icon::before{
+	content: ' ';
+	height:90%;
+	width:90%;
+	display:block;
+	position:absolute;
+	margin:5%;
+}
+a.icon:hover::before{
+	background-color:#EC6F66;
+
+}
+a.icon:hover .fa{
+	color:#FFF;
+}
+hgroup, .subcontent{
+	text-align: center;
+	padding-top:20px;
+}
+.container-fluid .row{
+	padding-bottom:30px;
+	color:#383838;
+}
+.container-fluid.content{
+	padding:30px 0; margin:0 -15px;
+	overflow:hidden;
+}

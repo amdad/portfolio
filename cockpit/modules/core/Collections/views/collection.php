@@ -1,5 +1,9 @@
-{{ $app->assets(['collections:assets/collections.js','collections:assets/js/collection.js'], $app['cockpit/version']) }}
-{{ $app->assets(['assets:vendor/uikit/js/addons/nestable.min.js'], $app['cockpit/version']) }}
+@start('header')
+
+    {{ $app->assets(['collections:assets/collections.js','collections:assets/js/collection.js'], $app['cockpit/version']) }}
+    {{ $app->assets(['assets:vendor/uikit/js/addons/nestable.min.js'], $app['cockpit/version']) }}
+
+@end('header')
 
 <div data-ng-controller="collection" data-id="{{ $id }}" ng-cloak>
 
@@ -155,6 +159,7 @@
                             <button type="submit" class="uk-button uk-button-primary uk-button-large">@lang('Save Collection')</button>
                             <a href="@route('/collections/entries')/@@ collection._id @@" class="uk-button uk-button-large" data-ng-show="collection._id"><i class="uk-icon-bars"></i> @lang('Goto entries')</a>
                         </div>
+                        &nbsp;
                         <a href="@route('/collections')">@lang('Cancel')</a>
                     </div>
 

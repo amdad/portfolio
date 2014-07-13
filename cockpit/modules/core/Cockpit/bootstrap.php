@@ -33,6 +33,23 @@ $this->module("cockpit")->extend([
     "get_registry" => function($key, $default=null) use($app) {
 
         return $app->memory->hget("cockpit.api.registry", $key, $default);
+    },
+
+    "clearCache" => function() use($app) {
+
+        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($app->path("cache:")), \RecursiveIteratorIterator::SELF_FIRST);
+
+        foreach ($files as $file) {
+
+            if(!$file->isFile()) continue;
+            if(preg_match('/(.gitkeep|index\.html)$/', $file)) continue;
+
+            @unlink($file->getRealPath());
+        }
+
+        $app->helper("fs")->removeEmptySubFolders('cache:');
+
+        return ["size"=>$app->helper("utils")->formatSize($app->helper("fs")->getDirSize('cache:'))];
     }
 ]);
 
@@ -96,6 +113,9 @@ if (COCKPIT_ADMIN && !COCKPIT_REST) {
     $app["cockpit"] = json_decode($app->helper("fs")->read("#root:package.json"), true);
 
     $assets = array_merge([
+
+        // misc
+        'assets:vendor/mousetrap.js',
 
         // angular
         'assets:vendor/angular/angular.min.js',

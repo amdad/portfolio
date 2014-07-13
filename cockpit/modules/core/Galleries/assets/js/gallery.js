@@ -120,7 +120,7 @@
         };
 
         $scope.imgurl = function(image) {
-            return image.path.replace('site:', window.COCKPIT_SITE_BASE_URL);
+            return encodeURI(image.path.replace('site:', window.COCKPIT_SITE_BASE_URL));
         };
 
         $scope.showMeta = function(index){
@@ -176,6 +176,17 @@
             $scope.$apply(function(){
                 $scope.gallery.fields = fields;
             });
+        });
+
+        // bind clobal command + save
+        Mousetrap.bindGlobal(['command+s', 'ctrl+s'], function(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            } else {
+                e.returnValue = false; // ie
+            }
+            $scope.save();
+            return false;
         });
 
     });

@@ -8,9 +8,9 @@ $app->bind("/api/forms/submit/:form", function($params) use($app){
 
     // Security check
 
-    if($formhash = $app->param("__csrf", false)) {
+    if ($formhash = $app->param("__csrf", false)) {
 
-        if($formhash != $app->hash($form)) {
+        if ($formhash != $app->hash($form)) {
             return false;
         }
 
@@ -20,25 +20,46 @@ $app->bind("/api/forms/submit/:form", function($params) use($app){
 
     $frm = $app->db->findOne("common/forms", ["name"=>$form]);
 
-    if(!$frm) {
+    if (!$frm) {
         return false;
     }
 
-    if($formdata = $app->param("form", false)) {
+    if ($formdata = $app->param("form", false)) {
 
-        if(isset($frm["email"]) && filter_var($frm["email"], FILTER_VALIDATE_EMAIL)) {
-
-            $body = array();
-
-            foreach ($formdata as $key => $value) {
-                $body[] = "<b>{$key}:</b>\n<br>";
-                $body[] = (is_string($value) ? $value:json_encode($value))."\n<br>";
-            }
-
-            $app->mailer->mail($frm["email"], $app->param("__mailsubject", "New form data for: ".$form), implode("\n<br>", $body));
+        // custom form validation
+        if ($app->path("custom:forms/{$form}.php") && false===include($app->path("custom:forms/{$form}.php"))) {
+            return false;
         }
 
-        if(isset($frm["entry"]) && $frm["entry"]) {
+        if(isset($frm["email"])) {
+
+            $emails          = array_map('trim', explode(',', $frm['email']));
+            $filtered_emails = [];
+
+            foreach($emails as $to){
+
+                // Validate each email address individually, push if valid
+                if(filter_var($to, FILTER_VALIDATE_EMAIL)){
+                    $filtered_emails[] = $to;
+                }
+            }
+
+            if (count($filtered_emails)) {
+
+                $frm['email'] = implode(',', $filtered_emails);
+
+                $body = [];
+
+                foreach ($formdata as $key => $value) {
+                    $body[] = "<b>{$key}:</b>\n<br>";
+                    $body[] = (is_string($value) ? $value:json_encode($value))."\n<br>";
+                }
+
+                $app->mailer->mail($frm["email"], $app->param("__mailsubject", "New form data for: ".$form), implode("\n<br>", $body));
+            }
+        }
+
+        if (isset($frm["entry"]) && $frm["entry"]) {
 
             $collection = "form".$frm["_id"];
             $entry      = ["data" => $formdata, "created"=>time()];
@@ -69,6 +90,19 @@ $this->module("forms")->extend([
     "collectionById" => function($formId) use($app) {
 
         $entrydb = "form{$formId}";
+
+        return $app->db->getCollection("forms/{$entrydb}");
+    },
+
+    "entries" => function($name) use($app) {
+
+        $frm = $app->db->findOne("common/forms", ["name"=>$name]);
+
+        if (!$frm) {
+            return false;
+        }
+
+        $entrydb = "form".$frm["_id"];
 
         return $app->db->getCollection("forms/{$entrydb}");
     }

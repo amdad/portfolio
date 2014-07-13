@@ -2,6 +2,13 @@ $(document).ready(function(){
     $('.navbar-lower').affix({
         offset: {top: 30}
     });
+
+    $('.content').each(function(){
+        if($(this).data('img')){
+            $(this).css('background-image','url(' + $(this).data('img') + ')');
+            console.log($(this).data('img'));
+        }
+    });
 });
 /*
 $(function(){
