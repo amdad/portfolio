@@ -1,7 +1,7 @@
 <?php
 
 // make sure that $_SERVER['DOCUMENT_ROOT'] exists and is set correctly
-$docsroot   = str_replace(DIRECTORY_SEPARATOR, '/', isset($_SERVER['DOCUMENT_ROOT']) ? realpath($_SERVER['DOCUMENT_ROOT']) : dirname(__DIR__));
+$docsroot   = dirname(__DIR__);
 $servername = isset($_SERVER["SERVER_NAME"])   ? $_SERVER["SERVER_NAME"] : 'localhost';
 
 return [

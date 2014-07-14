@@ -4,12 +4,37 @@ $(document).ready(function(){
     });
 
     $('.content').each(function(){
-        if($(this).data('img')){
-            $(this).css('background-image','url(' + $(this).data('img') + ')');
-            console.log($(this).data('img'));
+        var img = $(this).data('img');
+        var color = $(this).data('color');
+        if(img){
+            $(this).css('background-image','url(' + img + ')');
+            
+        }
+        if(color){
+            var c = hexToRgb(color);
+            if(img){
+                $(this).css('box-shadow', 'inset 0 0 0 1000px rgba(' + c.r + ',' + c.g + ',' + c.b + ',0.95)');
+            }else{
+                $(this).css('background-color',color);
+            }
         }
     });
 });
+
+function hexToRgb(hex) {
+    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+        return r + r + g + g + b + b;
+    });
+
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
 /*
 $(function(){
 
