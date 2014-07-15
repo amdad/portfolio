@@ -1,9 +1,8 @@
 <?php
 use Silex\WebTestCase;
 
-class homeTest extends WebTestCase
-{
-
+class HomeTest extends WebTestCase{
+    
 	public function createApplication(){
     	$app = require __DIR__.'/../app/app.php';
     	$app['debug'] = true;

@@ -15,6 +15,9 @@
         <testsuite name="Silex Test Suite">
             <directory>./vendor/Silex/tests/Silex/</directory>
         </testsuite>
+        <testsuite name="Cockpit Test Suite">
+            <directory>./cockpit/tests/tests/</directory>
+        </testsuite>
         <testsuite name="Portfolio Test Suite">
             <directory>./test/</directory>
         </testsuite>
