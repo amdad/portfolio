@@ -2,7 +2,7 @@
 
 define('TWIG_CONFIG',serialize(
 		array(
-        	'twig.path' => __DIR__.'/assets/views',
+        	'twig.path' => __DIR__.'/../assets/views',
         	'twig.options' => array('strict_variables' => false ),
     	)
 	)
