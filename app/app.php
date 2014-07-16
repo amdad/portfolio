@@ -1,5 +1,5 @@
 <?php
-$app = require_once __DIR__.'/bootstrap.php';
+$app = require __DIR__.'/bootstrap.php';
 
 $app->get('/', function () use ($app) {
     $data = collection("Pages")->findOne(["Title_slug"=>"home"]);
@@ -7,9 +7,6 @@ $app->get('/', function () use ($app) {
     return $app['twig']->render('page.twig', array(
         'data' => $data,
     ));
-});
-$app->get('/cockpit/', function () use ($app) {
-    return $app->redirect('/cockpit/index.php');
 });
 
 $app->get('/{pageslug}/', function ($pageslug) use ($app) {

@@ -44,8 +44,14 @@ gulp.task('clean', function() {
     .pipe(clean());
 });
 
+gulp.task('clearcache', function() {
+  return gulp.src(['cockpit/storage/cache/assets/**/*', 'cockpit/storage/cache/thumbs/**/*', 'cockpit/storage/cache/tmp/**/*'], {read: false})
+    .pipe(clean());
+});
+
+
 gulp.task('default', ['clean'], function() {
-    gulp.start('styles', 'scripts', 'images');
+    gulp.start('clearcache','styles', 'scripts', 'images');
 });
 
 gulp.task('watch', function() {
@@ -56,7 +62,7 @@ gulp.task('watch', function() {
   gulp.watch(['assets/dist/**']).on('change', function(file) {
     server.changed(file.path);
   });
-  // Watch .scss files
+  // Watch .css files
   gulp.watch('assets/css/**/*.css', ['styles']);
 
   // Watch .js files
@@ -64,5 +70,9 @@ gulp.task('watch', function() {
 
   // Watch image files
   gulp.watch('assets/img/**/*', ['images']);
+
+  // Watch views
+  gulp.watch('assets/views/**/*', ['clearcache']);
+  gulp.watch('cockpit/storage/data/**/*', ['clearcache']);
 
 });

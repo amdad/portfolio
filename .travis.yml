@@ -14,4 +14,4 @@ before_script:
   - cp test/assets/forms.sqlite cockpit/storage/data/forms.sqlite
   - composer install --prefer-source
 
-script: phpunit
+script: phpunit --testdox

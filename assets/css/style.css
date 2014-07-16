@@ -1,4 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Oswald:400,300);
+@import url(http://fonts.googleapis.com/css?family=Lato:300,900);
 @import url(//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css);
 
 body{
@@ -32,9 +33,10 @@ body{
   top: 0;
   width:100%;
 }
-.affix + .header{
-	margin-top:0px;
+.affix + .main{
+	margin-top:72px;
 }
+
 .navbar-brand img{
 	display:inline-block;
 	float:left;
@@ -57,19 +59,6 @@ body{
   	text-transform: none;
 }
 
-.header{
-	background-image:url('http://www.devface.be/img/park-place.jpg');
-	background-size: cover;
-	background-position:center;
-	margin-top:-70px;
-}
-
-.subheading{
-	font-size:1.4em;
-	padding-top:0;
-	margin-top:0;
-	color:#bababa;
-}
 #mainnav .navbar-nav>li{
 	padding-left:15px;
 	padding-right:15px;
@@ -97,13 +86,39 @@ body{
 	background-color:rgba(255,255,255,0.9);
 	font-family: 'Oswald', sans-serif;
 }
-.header{
-	height:400px;
-	overflow:hidden;
+
+hgroup{
+	text-align: center;
+	font-family: 'Lato', sans-serif;
+	margin-top:80px;
 }
-.header canvas{
-	margin-top:-20px;
+hgroup h1{
+	font-weight:900;
+	line-height: 2em;
 }
+hgroup .subheading{
+	font-weight:300;
+	font-size:1.5em;
+	line-height: 1.5em;
+	color:#999;
+	margin-bottom:80px;
+}
+
+a{
+	color:#EC6F66;
+}
+a:hover{
+	color:#BF5D56;
+}
+
+/*
+.subheading{
+	font-size:1.4em;
+	padding-top:0;
+	margin-top:0;
+	color:#bababa;
+}
+
 a.icon{
 	border: 1px solid #EC6F66;
 	display:block;
@@ -153,3 +168,4 @@ hgroup, .subcontent{
 	background-color: #FFF;
 	background-color:rgba(255,255,255,0.8);
 }
+*/
