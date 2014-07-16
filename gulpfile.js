@@ -1,14 +1,14 @@
-var gulp 			= require('gulp'),
-	autoprefixer 	= require('gulp-autoprefixer'),
-	minifycss 		= require('gulp-minify-css'),
-    uglify 			= require('gulp-uglify'),
-    imagemin 		= require('gulp-imagemin'),
-    rename 			= require('gulp-rename'),
-    clean 			= require('gulp-clean'),
-    concat 			= require('gulp-concat'),
-    notify 			= require('gulp-notify'),
-    cache 			= require('gulp-cache'),
-    livereload 		= require('gulp-livereload');
+var gulp         = require('gulp'),
+    autoprefixer = require('gulp-autoprefixer'),
+    minifycss    = require('gulp-minify-css'),
+    uglify       = require('gulp-uglify'),
+    imagemin     = require('gulp-imagemin'),
+    rename       = require('gulp-rename'),
+    clean        = require('gulp-clean'),
+    concat       = require('gulp-concat'),
+    notify       = require('gulp-notify'),
+    cache        = require('gulp-cache'),
+    livereload   = require('gulp-livereload');
 
 gulp.task('styles', function() {
   return gulp.src('assets/css/**/*.css')
