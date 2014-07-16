@@ -4,11 +4,13 @@ use Silex\WebTestCase;
 class HomeTest extends WebTestCase{
     
 	public function createApplication(){
+        @session_start();
+        
     	$app = require __DIR__.'/../app/app.php';
     	
         $app['debug'] = true;
     	$app['exception_handler']->disable();
-        
+
     	return $app;
 	}
    
