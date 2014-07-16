@@ -7,4 +7,8 @@ TODO
 -------
 * create test database (.tst)
 * create unit tests
-* update css + add content to prod database
+* further cleanup project structure
+* create theme + layout
+* check ability to use cockpit via composer (in vendor dir)
+    * extract DB
+    * extract config
