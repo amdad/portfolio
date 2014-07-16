@@ -21,8 +21,8 @@
 # Logs and databases #
 ######################
 *.log
-*.sql
-*.sqlite
+.sql
+cockpit/**/*.sqlite
 
 #  Project Specific  #
 ######################
@@ -40,5 +40,5 @@ node_modules/*
 composer.phar
 
 # Config
-*/config.php
+cockpit/config.php
 cfg/*

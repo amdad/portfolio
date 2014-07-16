@@ -1,9 +1,6 @@
 <?php
 $app = require_once __DIR__.'/bootstrap.php';
 
-error_reporting(-1);
-$app['debug'] = true;
-
 $app->get('/', function () use ($app) {
     $data = collection("Pages")->findOne(["Title_slug"=>"home"]);
 

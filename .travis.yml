@@ -1,0 +1,17 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+
+before_script:
+  - composer self-update
+  - cp test/assets/config.php cockpit/config.php
+  - cp test/assets/cockpit.memory.sqlite cockpit/storage/data/cockpit.memory.sqlite
+  - cp test/assets/cockpit.memory.sqlite cockpit/storage/data/cockpit.memory.sqlite
+  - cp test/assets/collections.sqlite cockpit/storage/data/collections.sqlite
+  - cp test/assets/common.sqlite cockpit/storage/data/common.sqlite
+  - cp test/assets/forms.sqlite cockpit/storage/data/forms.sqlite
+  - composer install --prefer-source
+
+script: phpunit
