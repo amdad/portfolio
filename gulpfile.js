@@ -8,6 +8,7 @@ var gulp         = require('gulp'),
     concat       = require('gulp-concat'),
     notify       = require('gulp-notify'),
     cache        = require('gulp-cache'),
+    chmod        = require('gulp-chmod'),
     livereload   = require('gulp-livereload');
 
 gulp.task('styles', function() {
@@ -50,6 +51,7 @@ gulp.task('clearcache', function() {
 });
 gulp.task('copydb', function() {
   return gulp.src(['cockpit/storage/data/**', '!cockpit/storage/data/cockpit.sqlite'])
+    .pipe(chmod(666))
     .pipe(gulp.dest('test/assets'))
     .pipe(notify({ message: 'DB copy task complete' }));
 });

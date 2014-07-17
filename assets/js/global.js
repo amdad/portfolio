@@ -12,11 +12,13 @@ $(document).ready(function(){
             
         }
         if(color){
-            var c = hexToRgb(color);
+            var o = color.split(",")[1] || "90";
+            o = "0." + o;
+            var c = hexToRgb(color.split(",")[0]);
             if(img){
-                $(this).css('box-shadow', 'inset 0 0 0 1000px rgba(' + c.r + ',' + c.g + ',' + c.b + ',0.95)');
+                $(this).css('box-shadow', 'inset 0 0 0 1000px rgba(' + c.r + ',' + c.g + ',' + c.b + ',' + o + ')');
             }else{
-                $(this).css('background-color',color);
+                $(this).css('background-color',color.split(",")[0]);
             }
         }
     });
