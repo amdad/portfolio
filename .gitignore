@@ -42,3 +42,4 @@ composer.phar
 # Config
 cockpit/config.php
 cfg/*
+.dropbox

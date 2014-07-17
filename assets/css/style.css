@@ -1,10 +1,3 @@
-@import url(http://fonts.googleapis.com/css?family=Oswald:400,300);
-@import url(http://fonts.googleapis.com/css?family=Lato:300,900);
-@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css);
-
-body{
-	font-family: "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
 .top-nav.navbar{
   height: 30px;
   min-height:30px;
@@ -27,14 +20,6 @@ body{
 }
 .top-nav .last{
 	margin-left:15px;
-}
-
-.affix {
-  top: 0;
-  width:100%;
-}
-.affix + .main{
-	margin-top:72px;
 }
 
 .navbar-brand img{
@@ -101,71 +86,35 @@ hgroup .subheading{
 	font-size:1.5em;
 	line-height: 1.5em;
 	color:#999;
+	margin-bottom:100px;
+}
+.icon-block{
+	margin-top:100px;
 	margin-bottom:80px;
-}
-
-a{
-	color:#EC6F66;
-}
-a:hover{
-	color:#BF5D56;
-}
-
-/*
-.subheading{
-	font-size:1.4em;
-	padding-top:0;
-	margin-top:0;
-	color:#bababa;
-}
-
-a.icon{
-	border: 1px solid #EC6F66;
-	display:block;
-	width:40%;
-	height: 0;
-	padding-bottom: 40%;
-	margin-left:25%;
-	position:relative;
-}
-a.icon .fa{
-	font-size:40px;
-	line-height: 100%;
-	width:96%;
-	text-align: center;
-	display:block;
-	margin-top:-20px;
-	position:absolute;
-	top: 50%;
-	color:#EC6F66;
-}
-a.icon::before{
-	content: ' ';
-	height:90%;
-	width:90%;
-	display:block;
-	position:absolute;
-	margin:5%;
-}
-a.icon:hover::before{
-	background-color:#EC6F66;
-
-}
-a.icon:hover .fa{
+	text-align:center;
 	color:#FFF;
+	line-height: 5em;
 }
-hgroup, .subcontent{
-	text-align: center;
-	padding-top:20px;
+.icon{
+	font-size: 30px;
+  	display: block;
+	width:30%;
+	margin-left:35%;
+	height: 0;
+	padding-bottom: 30%;
+	background-color:#EC6F66;
+	color:#FFF;
+  	text-align: center;
 }
-.container-fluid .row{
-	padding-bottom:30px;
-	color:#383838;
+.icon:hover{
+	background-color:#FFF;
+	color:#EC6F66;
 }
-.container-fluid.content{
-	padding:30px 0; margin:0 -15px;
-	overflow:hidden;
-	background-color: #FFF;
-	background-color:rgba(255,255,255,0.8);
+.icon i{
+	padding-top:50%;
+	margin-top:-15px;
 }
-*/
+.bgimg{
+	background-size: cover;
+}
+

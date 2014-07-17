@@ -29,10 +29,10 @@ class HomeTest extends WebTestCase{
         $crawler = $client->request('GET', '/');
         $nav = collection("Pages")->find(["navigation"=>true])->toArray();
 
-        //Test if nav exists
+        //Test if top-nav exists
         $this->assertCount(1, $crawler->filter('nav.top-nav'));
 
-        //Test Homepage 
+        //Test Homepage & lower nav
         $homeurl = $crawler->filter('nav.navbar-lower')->selectLink('Home');
         $this->assertCount(1,$crawler->filter('nav.navbar-lower')->selectLink('Home'));
         $client->click($homeurl->link());

@@ -3,11 +3,12 @@ $(document).ready(function(){
         offset: {top: 30}
     });
 
-    $('.content').each(function(){
+    $('.row').each(function(){
         var img = $(this).data('img');
         var color = $(this).data('color');
         if(img){
             $(this).css('background-image','url(' + img + ')');
+            $(this).addClass('bgimg');
             
         }
         if(color){

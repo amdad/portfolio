@@ -48,6 +48,11 @@ gulp.task('clearcache', function() {
   return gulp.src(['cockpit/storage/cache/assets/**/*', 'cockpit/storage/cache/thumbs/**/*', 'cockpit/storage/cache/tmp/**/*'], {read: false})
     .pipe(clean());
 });
+gulp.task('copydb', function() {
+  return gulp.src(['cockpit/storage/data/**', '!cockpit/storage/data/cockpit.sqlite'])
+    .pipe(gulp.dest('test/assets'))
+    .pipe(notify({ message: 'DB copy task complete' }));
+});
 
 
 gulp.task('default', ['clean'], function() {
@@ -73,6 +78,6 @@ gulp.task('watch', function() {
 
   // Watch views
   gulp.watch('assets/views/**/*', ['clearcache']);
-  gulp.watch('cockpit/storage/data/**/*', ['clearcache']);
+  gulp.watch('cockpit/storage/data/**/*', ['copydb', 'clearcache']);
 
 });
