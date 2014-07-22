@@ -17,7 +17,7 @@
 		<ul>
 			{% for status in twitter %}
 				<li>
-					<span class="txt subheading col-lg-12">{{ status.text|clickable|raw }}</span>
+					<span class="txt subheading col-lg-12">{{ status|clickable|raw }}</span>
 					<span class="details col-lg-12">
 						<a href="https://twitter.com/intent/tweet?in_reply_to={{ status.id }}" target="_blank">
 							<i class="fa fa-reply"></i>
