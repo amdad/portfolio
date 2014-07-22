@@ -28,4 +28,8 @@
         <server name="SERVER_PORT" value="80" />
         <env name="env" value="test" />
     </php>
+
+    <logging>
+        <log type="coverage-clover" target="app/logs/clover.xml"/>
+  </logging>
 </phpunit>

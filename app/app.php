@@ -3,9 +3,14 @@ $app = require __DIR__.'/bootstrap.php';
 
 $app->get('/', function () use ($app) {
     $data = collection("Pages")->findOne(["Title_slug"=>"home"]);
+    $cfg = unserialize(TWITTER_CONFIG);
+
+    $twitter = new Twitter($cfg['API_key'], $cfg['API_secret'], $cfg['token'], $cfg['secret']);
+    $statuses = $twitter->load(Twitter::ME);
 
     return $app['twig']->render('page.twig', array(
         'data' => $data,
+        'twitter' => $statuses,
     ));
 });
 

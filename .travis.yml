@@ -4,6 +4,10 @@ php:
   - 5.4
   - 5.5
 
+addons:
+  code_climate:
+    repo_token: 52eb77a846bc32f9bc8b313d0ecc7b9109d3dc6961cd9f9f287496d4a833c294 
+
 before_script:
   - composer self-update
   - cp test/assets/config.php cockpit/config.php
@@ -13,5 +17,8 @@ before_script:
   - cp test/assets/common.sqlite cockpit/storage/data/common.sqlite
   - cp test/assets/forms.sqlite cockpit/storage/data/forms.sqlite
   - composer install --prefer-source
+
+after_script:
+  - vendor/bin/test-reporter
 
 script: phpunit --testdox
