@@ -4,6 +4,7 @@
     RewriteEngine On
     #RewriteBase /path/to/app
     RewriteRule ^(cockpit)($|/) - [L]
+    RewriteRule ^(cfg)($|/) - [L]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [QSA,L]
 </IfModule>
