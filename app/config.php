@@ -18,10 +18,10 @@ define('TWIG_GLOBALS',serialize(
 );
 define('TWITTER_CONFIG',serialize(
         array(
-            "API_key" => "RX87j8LHBeK2GrQildmqjrgT7",
-            "API_secret" => "cusGBGGo5z3do4urC9qfUDjJioEMIY5PS3oe7zMacgA96h9JBk",
-            "token" => "15457913-GcpOHgGWm5MswWgpJmSrbg537rF9FCEMI9zWSUM0O",
-            "secret" => "LlFkVMfSx6v2zbN5zsbqHG9FqW9vM4LV3d0iOogYVEy1Y"
+            "API_key" => get_registry('twitter_api_key', ""),
+            "API_secret" => get_registry('twitter_api_secret', ""),
+            "token" => get_registry('twitter_token', ""),
+            "secret" => get_registry('twitter_secret', "")
         )
     )
 );
