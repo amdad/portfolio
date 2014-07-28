@@ -3,18 +3,12 @@ $app = require __DIR__.'/bootstrap.php';
 
 $app->get('/', function () use ($app) {
     $data = collection("Pages")->findOne(["Title_slug"=>"home"]);
-    $cfg = unserialize(TWITTER_CONFIG);
+    
 
-    try{
-        $twitter = new Twitter($cfg['API_key'], $cfg['API_secret'], $cfg['token'], $cfg['secret']);
-        $statuses = $twitter->load(Twitter::ME);
-    }catch(Exception $e){
-        $statuses = null;
-    }
+    $data['content'] = smartTags($app, $data['content']);
 
     return $app['twig']->render('page.twig', array(
         'data' => $data,
-        'twitter' => $statuses,
     ));
 });
 

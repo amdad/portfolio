@@ -35,6 +35,7 @@ vendor/*
 */backups/*
 cockpit/storage/*
 node_modules/*
+Icon
 
 # Composer
 composer.phar

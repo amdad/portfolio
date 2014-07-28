@@ -1,0 +1,24 @@
+	<div class="row slider" id="twitter">
+		<h2 class="">Latest Tweets:</h2>
+		<ul>
+			{% for status in twitter %}
+				<li>
+					<span class="txt subheading col-lg-12">{{ status|clickable|raw }}</span>
+					<span class="details col-lg-12">
+						<a href="https://twitter.com/intent/tweet?in_reply_to={{ status.id }}" target="_blank">
+							<i class="fa fa-reply"></i>
+						</a>
+						<a href="https://twitter.com/intent/retweet?tweet_id={{ status.id }}" target="_blank">
+							<i class="fa fa-retweet"></i>
+						</a>
+						<a href="https://twitter.com/intent/favorite?tweet_id={{ status.id }}" target="_blank">
+							<i class="fa fa-star"></i>
+						</a>
+						<abbr class="date" title="{{ status.created_at }}">
+							{{ status.created_at|date("d/m/Y H:m") }}
+						</abbr>
+					</span>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>

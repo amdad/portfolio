@@ -1,5 +1,4 @@
 <?php
-
 // make sure that $_SERVER['DOCUMENT_ROOT'] exists and is set correctly
 $docsroot   = dirname(__DIR__);
 $servername = isset($_SERVER["SERVER_NAME"])   ? $_SERVER["SERVER_NAME"] : 'localhost';
