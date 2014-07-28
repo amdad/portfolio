@@ -5,7 +5,7 @@ $app->get('/', function () use ($app) {
     $data = collection("Pages")->findOne(["Title_slug"=>"home"]);
     
 
-    $data['content'] = smartTags($app, $data['content']);
+    $data['content'] = Cms::smartTags($app, $data['content']);
 
     return $app['twig']->render('page.twig', array(
         'data' => $data,
