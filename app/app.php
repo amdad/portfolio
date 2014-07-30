@@ -12,20 +12,18 @@ $app->get('/', function () use ($app) {
     ));
 });
 
-$app->get('/{pageslug}/', function ($pageslug) use ($app) {
-    $data = collection("Pages")->findOne(["Title"=>$pageslug]);
-    if ($data === null){
-        $data = collection("Pages")->findOne(["Title_slug"=>$pageslug]);
-    }
-    return $app['twig']->render('page.twig', array(
-        'data' => $data,
-    ));
-});
-
 $app->get('/blog/', function () use ($app) {
-    $data = collection("blog")->toArray();
+    $posts = collection("posts")->find(["Personal"=>FALSE])->toArray();
+    $shares = collection("shares")->find(["Personal"=>FALSE])->toArray();
 
-    return $app['twig']->render('page.twig', array(
+    $data = array_merge($posts, $shares);
+
+    usort($data, function($a, $b) {
+        return $b['created'] - $a['created'];
+    });
+    d($data);
+
+    return $app['twig']->render('blog.twig', array(
         'data' => $data,
     ));
 });
@@ -33,6 +31,16 @@ $app->get('/blog/', function () use ($app) {
 $app->get('/blog/{postslug}/', function ($postslug) use ($app) {
     $data = collection("blog")->findOne(["title"=>$postslug]);
 
+    return $app['twig']->render('post.twig', array(
+        'data' => $data,
+    ));
+});
+
+$app->get('/{pageslug}/', function ($pageslug) use ($app) {
+    $data = collection("Pages")->findOne(["Title"=>$pageslug]);
+    if ($data === null){
+        $data = collection("Pages")->findOne(["Title_slug"=>$pageslug]);
+    }
     return $app['twig']->render('page.twig', array(
         'data' => $data,
     ));
