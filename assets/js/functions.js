@@ -36,7 +36,7 @@ function hexToRgb(hex) {
                     $(this).removeClass('show');
                     
                     var next = current.next();
-                    if(direction == "prev"){
+                    if(direction === "prev"){
                         next = current.prev();
                     }
 
