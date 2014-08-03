@@ -8,14 +8,6 @@ define('TWIG_CONFIG',serialize(
     	)
 	)
 );
-define('TWIG_GLOBALS',serialize(
-		array(
-        	"telephone" => get_registry('Telephone', ""),
-        	"email" => get_registry('Email', ""),
-        	"nav" => collection("Pages")->find(["navigation"=>true])->toArray(),
-    	)
-	)
-);
 define('TWITTER_CONFIG',serialize(
         array(
             "API_key" => get_registry('twitter_api_key', ""),
@@ -24,4 +16,14 @@ define('TWITTER_CONFIG',serialize(
             "secret" => get_registry('twitter_secret', "")
         )
     )
+);
+define('EMBEDLY_CONFIG',get_registry('embedly_key',""));
+define('TWIG_GLOBALS',serialize(
+		array(
+        	"telephone" => get_registry('Telephone', ""),
+        	"email" => get_registry('Email', ""),
+        	"nav" => collection("Pages")->find(["navigation"=>true])->toArray(),
+            "embedly" => EMBEDLY_CONFIG,
+    	)
+	)
 );

@@ -133,6 +133,9 @@ h1, h2{
 	color:#999;
 	text-align: center;
 }
+.blog h2{
+	text-align: left;
+}
 
 /*
  * Icon Block

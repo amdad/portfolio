@@ -1,5 +1,9 @@
 {% extends "tmpl/layout.twig" %}
 
 {% block content %}
-
+<h1>{{ data.Title }}</h1>
+<article>
+	<img src="{{ post.Image }}"/>
+	{{ data.Content|md|raw }}
+</article>
 {% endblock %}
