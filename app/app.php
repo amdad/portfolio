@@ -31,7 +31,7 @@ $app->get('/blog/', function () use ($app) {
 
     foreach ($posts as $i=>$post){
         $ct = cockpit("cockpit")->markdown($post['Content']);
-        $posts[$i]['Content'] = split('</p>',$ct)[0];
+        $posts[$i]['Content'] = explode('</p>',$ct)[0];
     }
 
     $data = array_merge($posts, $shares);
