@@ -9,7 +9,7 @@ $app = new Silex\Application();
 $app['debug'] = true;
 
 $app->register(new Silex\Provider\TwigServiceProvider(), unserialize(TWIG_CONFIG));
-$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+$app['twig'] = $app->share($app->extend('twig', function(Twig_Environment $twig, Silex\Application $app) {
 	
 	$twig->addGlobal('globals', unserialize(TWIG_GLOBALS));
 
