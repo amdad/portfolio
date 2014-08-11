@@ -11,7 +11,6 @@
 <section class="blog container"> 
 {% for post in data %}
 	{% if post.provider_url is not defined %}
-	{% if loop.index is not even %}<div class="row">{% endif %}
 		<article class="col-md-6 post {% if loop.index is even %}even{% else %}uneven{% endif %}">
 						<img src="{{ post.Image|thumb }}" class="col-md-12" />
 						<div class="col-md-10 col-md-offset-1 content">
@@ -62,7 +61,6 @@
 						</div>
 		</article>
 	{% endif %}
-	{% if loop.index is even %}</div>{% endif %}
 {% endfor %}
 </section>
 

@@ -13,36 +13,22 @@ $app->get('/', function () use ($app) {
 });
 
 $app->get('/blog/', function () use ($app) {
-    $posts = collection("posts")->find(["Personal"=>FALSE])->toArray();
-    $shares = collection("shares")->find(["Personal"=>FALSE])->toArray();
+    $posts = collection("posts")->find(function($p){
+        return ($p["Personal"] != true && $p['Publish'] === true);
+    })->toArray();
+    $shares = collection("shares")->find(function($p){
+        return ($p["Personal"] != true && $p['Publish'] === true);
+    })->toArray();
 
-    $urls = "";
-    $dates = [];
-    $tags = [];
-    foreach ($shares as $share){
-        $urls .= $share['url'].",";
-        array_push($dates, $share['created']);
-        array_push($tags, $share['tags']);
-    }
-    $urls = trim($urls,",");
-    //&maxwidth=:maxwidth&maxheight=:maxheight&format=:format&callback=:callback
-    $shares = json_decode(file_get_contents("http://api.embed.ly/1/extract?key=".EMBEDLY_CONFIG."&urls=".$urls),true);
-    foreach ($shares as $i=>$share){
-        $shares[$i]['created'] = $dates[$i];
-        $shares[$i]['tags'] = $tags[$i];
-    }
-
-    foreach ($posts as $i=>$post){
-        $ct = cockpit("cockpit")->markdown($post['Content']);
-        $posts[$i]['Content'] = explode('</p>',$ct)[0];
-    }
+    $shares = Cms::processShares($shares);
+    $posts = Cms::processPosts($posts);
+    
 
     $data = array_merge($posts, $shares);
 
     usort($data, function($a, $b) {
         return $b['created'] - $a['created'];
     });
-    d($data);
 
     return $app['twig']->render('blog.twig', array(
         'data' => $data,

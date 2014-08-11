@@ -29,5 +29,35 @@ class Cms{
         }
         return $data;
     }
+
+    public static function processPosts($posts){
+        foreach ($posts as $i=>$post){
+            $ct = cockpit("cockpit")->markdown($post['Content']);
+            $posts[$i]['Content'] = explode('</p>',$ct)[0];
+        }
+        return $posts;
+    }
+
+    public static function processShares($shares){
+        $urls = "";
+        $dates = [];
+        $tags = [];
+    
+        foreach ($shares as $share){
+            $urls .= $share['url'].",";
+            array_push($dates, $share['created']);
+            array_push($tags, $share['tags']);
+        }
+        
+        $urls = trim($urls,",");
+        //&maxwidth=:maxwidth&maxheight=:maxheight&format=:format&callback=:callback
+        $shares = json_decode(file_get_contents("http://api.embed.ly/1/extract?key=".EMBEDLY_CONFIG."&urls=".$urls),true);
+        foreach ($shares as $i=>$share){
+            $shares[$i]['created'] = $dates[$i];
+            $shares[$i]['tags'] = $tags[$i];
+        }
+
+        return $shares;
+    }
 }
 

@@ -264,12 +264,12 @@ body>footer>div{
 
 .blog .post{
 	padding:0;
-}
-.blog .post{
 	border:2px solid #eeeeee;
+	margin-top:-2px;
 }
-.blog .post .row-fluid, .blog .post .row{
+.blog .post .row-fluid, .blog .post .row, .blog .row{
 	padding:0;
+	margin-bottom:0;
 }
 .blog .post.even{
 	margin-left:-1px;
