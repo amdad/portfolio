@@ -47,4 +47,6 @@ $(document).ready(function(){
     //header slider
     var slider = new BadassSlider($('#twitter'), 'ul>li', 10000);
 
+    $('.blog .post .content').responsiveEqualHeightGrid();
+
 });

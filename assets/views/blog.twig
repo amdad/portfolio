@@ -1,32 +1,68 @@
 {% extends "tmpl/layout.twig" %}
 
 {% block content %}
+<h1>Blog</h1>
+{# not to be used yet. For new version
+<div class="cat container">
+		<a href="/blog" class="btn-tag first active">Work</a> 
+		<a href="/blog/personal" class="btn-tag last">Personal</a>
+</div>
+ #}
 <section class="blog container"> 
 {% for post in data %}
 	{% if post.provider_url is not defined %}
-		<article class="row">
-			<img src="{{ post.Image|thumb }}" class="col-md-3" />
-			<div class="col-md-9">
-				<h2><a href="/blog/{{post.Title_slug}}">{{ post.Title }}</a></h2>
-				{{ post.created|date('d/m/Y H:m') }} - {% for tag in post.tags %}<a href="/blog/cat/{{tag}}">{{ tag }}</a> {% endfor %}
-
-				{{ post.Content|raw }}
-
-				<a href="/blog/{{post.Title_slug}}">Read more</a>
-			</div>
+	{% if loop.index is not even %}<div class="row">{% endif %}
+		<article class="col-md-6 post {% if loop.index is even %}even{% else %}uneven{% endif %}">
+						<img src="{{ post.Image|thumb }}" class="col-md-12" />
+						<div class="col-md-10 col-md-offset-1 content">
+							<header>
+								<div class="tags">
+									{% for tag in post.tags %}<a class="btn-tag" href="/blog/cat/{{tag}}"><p>{{ tag }}</p></a> {% endfor %}
+								</div>
+								<h2><a href="/blog/{{post.Title_slug}}">{{ post.Title }}</a></h2>
+								<div class="meta">
+									<span class="date">
+										<i class="glyphicon glyphicon-time"></i> {{ post.created|date('d/m/Y H:m') }}
+									</span>
+									<span class="author">
+										<i class="glyphicon glyphicon-user"></i> Kristof Feys
+									</span>
+								</div>
+							</header>
+							{{ post.Content|raw }}
+				
+							<footer>
+								<a href="/blog/{{post.Title_slug}}" class="more">Read more</a>
+							</footer>
+						</div>
 		</article>
 	{% else %}
-		<article class="row">
-			<img src="http://i.embed.ly/1/display/crop?height=300&width=300&url={{ post.images[0].url|url_encode }}&key={{ globals.embedly }}" class="col-md-3"/>
-			<div class="col-md-9">
-				<h2><a href="{{ post.url }}" target="_blank">{{ post.title }}</a></h2>
-				{{ post.created|date('d/m/Y H:m') }}
-				{{ post.description }}
-
-				<a href="{{ post.url }}" target="_blank">Read more</a>
-			</div>
+		<article class="col-md-6 post {% if loop.index is even %}even{% else %}uneven{% endif %}">
+						<img src="http://i.embed.ly/1/display/crop?height=100&width=300&url={{ post.images[0].url|url_encode }}&key={{ globals.embedly }}" class="col-md-12"/>
+						<div class="col-md-10 col-md-offset-1 content">
+							<header>
+								<div class="tags">
+									{% for tag in post.tags %}<a class="btn-tag" href="/blog/cat/{{tag}}"><p>{{ tag }}</p></a> {% endfor %}
+								</div>
+								<h2><a href="{{ post.url }}" target="_blank">{{ post.title }}</a></h2>
+								<div class="meta">
+									<span class="date">
+										<i class="glyphicon glyphicon-time"></i> {{ post.created|date('d/m/Y H:m') }}
+									</span>
+									<span class="author">
+										<i class="glyphicon glyphicon-user"></i> {{ post.provider_display }}
+									</span>
+								</div>
+							</header>
+							{{ post.description }}
+				
+							<footer>
+								<a href="{{ post.url }}" target="_blank" class="more">Read more</a>
+							</footer>
+						</div>
 		</article>
 	{% endif %}
+	{% if loop.index is even %}</div>{% endif %}
 {% endfor %}
 </section>
 

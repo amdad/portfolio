@@ -29,7 +29,7 @@ $app['twig'] = $app->share($app->extend('twig', function(Twig_Environment $twig,
 	$twig->addFilter($markdown);
 
 	$thumb = new Twig_SimpleFilter('thumb', function ($string) {
-    	return cockpit("mediamanager")->thumbnail($string,"300","300");
+    	return cockpit("mediamanager")->thumbnail($string,"300","100");
 	});
 	$twig->addFilter($thumb);
 
