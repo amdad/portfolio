@@ -64,4 +64,11 @@
 {% endfor %}
 </section>
 
+{% include 'tmpl/pagination.twig' with {
+    currentPage: page,
+    paginationPath: "/blog/page/",
+    lastPage: pages,
+    showAlwaysFirstAndLast: true
+} only %}
+
 {% endblock %}

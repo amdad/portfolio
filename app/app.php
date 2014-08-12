@@ -12,10 +12,16 @@ $app->get('/', function () use ($app) {
     ));
 });
 
-$app->get('/blog/', function () use ($app) {
+$blog = function ($page) use ($app) {
+    $limit = 4;
+    $count = collection('posts')->count(function($p){
+        return ($p["Personal"] != true && $p['Publish'] === true);
+    });
+    $pages = ceil($count/$limit);
+
     $posts = collection("posts")->find(function($p){
         return ($p["Personal"] != true && $p['Publish'] === true);
-    })->limit(10)->toArray();
+    })->limit($limit)->skip(($page-1) * $limit)->toArray();
 
     $posts = Cms::processPosts($posts);
 
@@ -23,8 +29,13 @@ $app->get('/blog/', function () use ($app) {
     d($posts);
     return $app['twig']->render('blog.twig', array(
         'data' => $posts,
+        'page'=> $page, 
+        'pages'=> $pages
     ));
-});
+};
+$app->get('/blog/', $blog)->value('page', '1');
+$app->get('/blog/page/{page}/', $blog);
+
 
 $app->get('/blog/{postslug}/', function ($postslug) use ($app) {
     $data = collection("posts")->findOne(["Title_slug"=>$postslug]);

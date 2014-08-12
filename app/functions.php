@@ -45,11 +45,12 @@ class Cms{
         }
 
         $urls = trim($urls,",");
-        $shares = json_decode(file_get_contents("http://api.embed.ly/1/extract?key=".EMBEDLY_CONFIG."&urls=".$urls),true);
-        foreach ($shares as $i=>$share){
-            $posts[$keys[$i]]['embed'] = $shares[$i];
+        if(strlen($urls) > 4){
+            $shares = json_decode(file_get_contents("http://api.embed.ly/1/extract?key=".EMBEDLY_CONFIG."&urls=".$urls),true);
+            foreach ($shares as $i=>$share){
+                $posts[$keys[$i]]['embed'] = $shares[$i];
+            }
         }
-
         usort($posts, function($a, $b) {
             return $b['created'] - $a['created'];
         });
