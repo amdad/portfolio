@@ -15,23 +15,14 @@ $app->get('/', function () use ($app) {
 $app->get('/blog/', function () use ($app) {
     $posts = collection("posts")->find(function($p){
         return ($p["Personal"] != true && $p['Publish'] === true);
-    })->toArray();
-    $shares = collection("shares")->find(function($p){
-        return ($p["Personal"] != true && $p['Publish'] === true);
-    })->toArray();
+    })->limit(10)->toArray();
 
-    $shares = Cms::processShares($shares);
     $posts = Cms::processPosts($posts);
+
     
-
-    $data = array_merge($posts, $shares);
-
-    usort($data, function($a, $b) {
-        return $b['created'] - $a['created'];
-    });
-
+    d($posts);
     return $app['twig']->render('blog.twig', array(
-        'data' => $data,
+        'data' => $posts,
     ));
 });
 

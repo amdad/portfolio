@@ -31,33 +31,31 @@ class Cms{
     }
 
     public static function processPosts($posts){
+        $urls = "";
+        $keys = [];
+
         foreach ($posts as $i=>$post){
-            $ct = cockpit("cockpit")->markdown($post['Content']);
-            $posts[$i]['Content'] = explode('</p>',$ct)[0];
+            if(array_key_exists('share',$post) && $post['share'] !== null && $post['share'] !== ""){
+                $urls .= $post['share'].",";
+                array_push($keys, $i);
+            }else{
+                $ct = cockpit("cockpit")->markdown($post['Content']);
+                $posts[$i]['Content'] = explode('</p>',$ct)[0];
+            }
         }
+
+        $urls = trim($urls,",");
+        $shares = json_decode(file_get_contents("http://api.embed.ly/1/extract?key=".EMBEDLY_CONFIG."&urls=".$urls),true);
+        foreach ($shares as $i=>$share){
+            $posts[$keys[$i]]['embed'] = $shares[$i];
+        }
+
+        usort($posts, function($a, $b) {
+            return $b['created'] - $a['created'];
+        });
+
         return $posts;
     }
 
-    public static function processShares($shares){
-        $urls = "";
-        $dates = [];
-        $tags = [];
-    
-        foreach ($shares as $share){
-            $urls .= $share['url'].",";
-            array_push($dates, $share['created']);
-            array_push($tags, $share['tags']);
-        }
-        
-        $urls = trim($urls,",");
-        //&maxwidth=:maxwidth&maxheight=:maxheight&format=:format&callback=:callback
-        $shares = json_decode(file_get_contents("http://api.embed.ly/1/extract?key=".EMBEDLY_CONFIG."&urls=".$urls),true);
-        foreach ($shares as $i=>$share){
-            $shares[$i]['created'] = $dates[$i];
-            $shares[$i]['tags'] = $tags[$i];
-        }
-
-        return $shares;
-    }
 }
 
