@@ -49,4 +49,7 @@ $(document).ready(function(){
 
     $('.blog .post .content').responsiveEqualHeightGrid();
 
+    $('.pagination .disabled').click(function(event){
+        event.preventDefault();
+    });
 });

@@ -239,7 +239,7 @@ body>footer>div{
 	padding:0;
 }
 .blog{
-	margin-bottom:100px;
+	margin-bottom:20px;
 }
 
 .blog .post h2 a{
@@ -302,5 +302,23 @@ a.more:hover{
 }
 .cat .last{
 	right:18px;
+}
+.pagination>li>a:hover, .pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus{
+	background-color:#EC6F66;
+	border-color:#EC6F66;
+	color:#fff;
+}
+.pagination>li>a{
+	color:#EC6F66;
+	transform: skew(-20deg); 
+    -webkit-transform: skew(-20deg);
+    margin:5px;
+    border-color: #EC6F66;
+}
+.pagination>li:last-child>a, .pagination>li:last-child>span, .pagination>li:first-child>a, .pagination>li:first-child>span{
+    border-radius: 0;
+}
+.pagination{
+	margin-bottom:100px;
 }
 
