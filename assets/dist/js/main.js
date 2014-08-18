@@ -24,7 +24,6 @@ function hexToRgb(hex) {
             var timer, fadeTime = Math.round(time / 6);
 
             function showFirstSlide() {
-                console.log("ok");
                 slider.find(selector).first().fadeIn(fadeTime, function () {$(this).addClass('show'); });
             }
 
@@ -39,8 +38,6 @@ function hexToRgb(hex) {
                     if(direction === "prev"){
                         next = current.prev();
                     }
-
-                    console.log(next);
 
                     if (next.html()) {
                         next.fadeIn(fadeTime, function () {$(this).addClass('show'); });
@@ -186,6 +183,7 @@ $(document).ready(function(){
   };
 
 })(jQuery);
+
 /**
  * Timeago is a jQuery plugin that makes it easy to support automatically
  * updating fuzzy timestamps (e.g. "4 minutes ago" or "about 1 day ago").
@@ -203,13 +201,7 @@ $(document).ready(function(){
  */
 
 (function (factory) {
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(['jquery'], factory);
-  } else {
-    // Browser globals
-    factory(jQuery);
-  }
+  factory(jQuery);
 }(function ($) {
   $.timeago = function(timestamp) {
     if (timestamp instanceof Date) {
@@ -335,7 +327,9 @@ $(document).ready(function(){
     update: function(time){
       var parsedTime = $t.parse(time);
       $(this).data('timeago', { datetime: parsedTime });
-      if($t.settings.localeTitle) $(this).attr("title", parsedTime.toLocaleString());
+      if($t.settings.localeTitle) {
+        $(this).attr("title", parsedTime.toLocaleString());
+      }
       refresh.apply(this);
     },
     updateFromDOM: function(){
@@ -367,7 +361,7 @@ $(document).ready(function(){
     var $s = $t.settings;
 
     if (!isNaN(data.datetime)) {
-      if ( $s.cutoff == 0 || Math.abs(distance(data.datetime)) < $s.cutoff) {
+      if ( $s.cutoff === 0 || Math.abs(distance(data.datetime)) < $s.cutoff) {
         $(this).text(inWords(data.datetime));
       }
     }

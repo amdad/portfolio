@@ -24,7 +24,6 @@ function hexToRgb(hex) {
             var timer, fadeTime = Math.round(time / 6);
 
             function showFirstSlide() {
-                console.log("ok");
                 slider.find(selector).first().fadeIn(fadeTime, function () {$(this).addClass('show'); });
             }
 
@@ -39,8 +38,6 @@ function hexToRgb(hex) {
                     if(direction === "prev"){
                         next = current.prev();
                     }
-
-                    console.log(next);
 
                     if (next.html()) {
                         next.fadeIn(fadeTime, function () {$(this).addClass('show'); });

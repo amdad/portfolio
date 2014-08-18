@@ -15,13 +15,7 @@
  */
 
 (function (factory) {
-  if (typeof define === 'function' && define.amd) {
-    // AMD. Register as an anonymous module.
-    define(['jquery'], factory);
-  } else {
-    // Browser globals
-    factory(jQuery);
-  }
+  factory(jQuery);
 }(function ($) {
   $.timeago = function(timestamp) {
     if (timestamp instanceof Date) {
@@ -147,7 +141,9 @@
     update: function(time){
       var parsedTime = $t.parse(time);
       $(this).data('timeago', { datetime: parsedTime });
-      if($t.settings.localeTitle) $(this).attr("title", parsedTime.toLocaleString());
+      if($t.settings.localeTitle) {
+        $(this).attr("title", parsedTime.toLocaleString());
+      }
       refresh.apply(this);
     },
     updateFromDOM: function(){
@@ -179,7 +175,7 @@
     var $s = $t.settings;
 
     if (!isNaN(data.datetime)) {
-      if ( $s.cutoff == 0 || Math.abs(distance(data.datetime)) < $s.cutoff) {
+      if ( $s.cutoff === 0 || Math.abs(distance(data.datetime)) < $s.cutoff) {
         $(this).text(inWords(data.datetime));
       }
     }
