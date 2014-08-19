@@ -1,6 +1,6 @@
 var gulp         = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
-    less		 = require('gulp-less'),
+    less		     = require('gulp-sass'),
     minifycss    = require('gulp-minify-css'),
     uglify       = require('gulp-uglify'),
     imagemin     = require('gulp-imagemin'),
@@ -13,9 +13,8 @@ var gulp         = require('gulp'),
     livereload   = require('gulp-livereload');
 
 gulp.task('styles', function() {
-  return gulp.src('assets/less/**/*.less')
-    .pipe(concat('main.css'))
-    .pipe(less())
+  return gulp.src('assets/sass/**/*.scss')
+    .pipe(sass())
     .pipe(gulp.dest('assets/dist/css'))
     .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
     .pipe(gulp.dest('assets/dist/css'))
@@ -72,7 +71,7 @@ gulp.task('watch', function() {
     server.changed(file.path);
   });
   // Watch .less files
-  gulp.watch('assets/less/**/*.less', ['styles']);
+  gulp.watch('assets/sass/**/*.scss', ['styles']);
 
   // Watch .js files
   gulp.watch('assets/js/**/*.js', ['scripts']);

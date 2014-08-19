@@ -1,6 +1,6 @@
 <?php
 // make sure that $_SERVER['DOCUMENT_ROOT'] exists and is set correctly
-$docsroot   = dirname(__DIR__);
+$docsroot   = str_replace(DIRECTORY_SEPARATOR, '/', dirname(__DIR__));
 $servername = isset($_SERVER["SERVER_NAME"])   ? $_SERVER["SERVER_NAME"] : 'localhost';
 
 return [
@@ -15,10 +15,6 @@ return [
     "docs_root"         => $docsroot,
 
     "database"          => [ "server" => "mongolite://".(__DIR__.'/storage/data'), "options" => ["db" => "cockpitdb"] ],
-
-    /* use mongodb as db storage
-    "database"          => [ "server" => "mongodb://localhost:27017", "options" => ["db" => "cockpitdb"] ],
-    */
 
     "mailer"            => [
         "from"      => "info@{$servername}",

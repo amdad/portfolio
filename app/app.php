@@ -25,8 +25,6 @@ $blog = function ($page) use ($app) {
 
     $posts = Cms::processPosts($posts);
 
-    
-    d($posts);
     return $app['twig']->render('blog.twig', array(
         'data' => $posts,
         'page'=> $page, 
@@ -40,9 +38,39 @@ $app->get('/blog/page/{page}/', $blog);
 $app->get('/blog/{postslug}/', function ($postslug) use ($app) {
     $data = collection("posts")->findOne(["Title_slug"=>$postslug]);
 
-    d($data);
+    if($data === null){
+        $app->abort(404, "Post '$postslug' does not exist.");
+    }
 
     return $app['twig']->render('post.twig', array(
+        'data' => $data,
+    ));
+});
+
+$app->get('/portfolio/', function() use ($app) {
+    $data = gallery("Portfolio");
+
+    d($data);
+
+    return $app['twig']->render('gallery.twig', array(
+        'data' => $data,
+    ));
+});
+
+$app->get('/cv/', function() use ($app) {
+    $content = Cms::curl_get_contents("http://registry.jsonresume.org/kristoffeys.md");
+    $content = cockpit("cockpit")->markdown($content);
+    $content = Cms::clean_html($content);
+
+    $data = [ 
+        "Title" => "Curriculum Vitae",
+        "Subtitle" => "Lorem ipsum",
+        "content" => "<section class='cv'>".$content."</section>"
+        ];
+
+    d($data);
+
+    return $app['twig']->render('page.twig', array(
         'data' => $data,
     ));
 });
@@ -51,6 +79,9 @@ $app->get('/{pageslug}/', function ($pageslug) use ($app) {
     $data = collection("Pages")->findOne(["Title"=>$pageslug]);
     if ($data === null){
         $data = collection("Pages")->findOne(["Title_slug"=>$pageslug]);
+    }
+    if($data === null){
+        $app->abort(404, "Page '$pageslug' does not exist.");
     }
     return $app['twig']->render('page.twig', array(
         'data' => $data,
