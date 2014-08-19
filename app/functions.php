@@ -58,7 +58,7 @@ class Cms{
         return $posts;
     }
 
-    function curl_get_contents($url){
+    public static function curl_get_contents($url){
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
@@ -69,7 +69,7 @@ class Cms{
         return $data;
     }
 
-    function clean_html($html){
+    public static function clean_html($html){
         $pattern = "/<[^\/>]*>([\s]?)*<\/[^>]*>/";
         $str = preg_replace($pattern, '', $html);
 
