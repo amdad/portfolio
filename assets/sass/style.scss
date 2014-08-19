@@ -272,7 +272,7 @@ a{
  	}
  }
 
-.row.slider ul li{
+.row.slider{
  	ul{
  		text-align: center;
  		margin:0; padding:0;
@@ -282,9 +282,9 @@ a{
  			margin:0; padding:0;
 
  			.details{
-
  				text-align: center;
- 				margin:10px 0; padding:0;
+ 				margin:10px 0; 
+ 				padding:0;
 
  				a, abbr{
  					margin:0 5px;
