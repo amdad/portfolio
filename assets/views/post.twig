@@ -4,7 +4,7 @@
 <section class="container">
 	<h1>{{ data.Title }}</h1>
 	<article>
-		<img src="{{ data.Image|sq }}"/>
+		<img src="{{ data.Image|crop("1200,300") }}"/>
 		{{ data.Content|md|raw }}
 	</article>
 </section>

@@ -58,7 +58,7 @@ $app->get('/portfolio/', function() use ($app) {
 });
 
 $app->get('/cv/', function() use ($app) {
-    $content = Cms::curlGet("http://registry.jsonresume.org/kristoffeys.md");
+    $content = Cms::curlGet(CV_URL.".md");
     $content = cockpit("cockpit")->markdown($content);
     $content = Cms::cleanHtml($content);
 

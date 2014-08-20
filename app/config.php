@@ -27,3 +27,4 @@ define('TWIG_GLOBALS',serialize(
     	)
 	)
 );
+define('CV_URL',get_registry('cv_url',""));

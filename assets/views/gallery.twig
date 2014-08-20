@@ -1,5 +1,35 @@
 {% extends "tmpl/layout.twig" %}
 
 {% block content %}
+<div class="container">
 	<h1>Gallery</h1>
+	{% for item in data %}
+	<div class="row">
+		<div class="col-md-6">
+			{% set type = item.data.device|default('macbook') %}
+			{% set dir = item.data.Orientation|default('landscape') %}
+			<div class="device-mockup" data-device="{{ type }}" data-orientation="{{ dir }}" data-color="black">
+    			<div class="device">
+        			<div class="screen horizontal">
+            			{% if type == "macbook" %}
+            				<img src="{{ item.path|crop("600,415") }}"/>
+            			{% elseif type == "ipad" %}
+            				{% if dir == 'landscape' %}
+            					<img src="{{ item.path|crop("600,515") }}"/>
+            				{% else %}
+            					<img src="{{ item.path|crop("515,600") }}"/>
+            				{% endif %}
+            			{% endif %}
+        			</div>
+        			<div class="button">
+            			<!-- You can hook the "home button" to some JavaScript events or just remove it -->
+        			</div>
+    			</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+		</div>
+	</div>
+	{% endfor %}
+</div>
 {% endblock %}

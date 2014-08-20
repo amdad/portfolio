@@ -33,10 +33,11 @@ $app['twig'] = $app->share($app->extend('twig', function(Twig_Environment $twig,
 	});
 	$twig->addFilter($thumb);
 
-	$sq = new Twig_SimpleFilter('sq', function ($string) {
-    	return cockpit("mediamanager")->thumbnail($string,"1200","300");
+	$crop = new Twig_SimpleFilter('crop', function ($string, $size) {
+		$par = explode(",",$size);
+    	return cockpit("mediamanager")->thumbnail($string,$par[0],$par[1]);
 	});
-	$twig->addFilter($sq);
+	$twig->addFilter($crop);
 
 	return $twig;
 }));
