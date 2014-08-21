@@ -17,6 +17,7 @@
 *.rar
 *.tar
 *.zip
+assets/sass/.sass-cache
 
 # Logs and databases #
 ######################

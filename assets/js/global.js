@@ -15,7 +15,7 @@ $(document).ready(function(){
         if(img){
             $(this).css('background-image','url(' + img + ')');
             $(this).addClass('bgimg');
-            
+
         }
         if(color){
             var o = color.split(",")[1] || "90";
@@ -39,10 +39,10 @@ $(document).ready(function(){
         $window.scroll(function() {
             var yPos = -($window.scrollTop() / ($bgobj.data('speed') || 30));
             $bgobj.css('backgroundPosition', '50% '+ yPos + 'px');
-        }); 
+        });
     });
 
-    $(".date").timeago(); 
+    $(".date").timeago();
 
     //header slider
     var slider = new BadassSlider($('#twitter'), 'ul>li', 10000);
@@ -51,5 +51,10 @@ $(document).ready(function(){
 
     $('.pagination .disabled').click(function(event){
         event.preventDefault();
+    });
+
+    //Tell me what you do with your big fat butt
+    $('.button').click(function(){
+      $(this).parent().parent().ClassyWiggle('start', {limit: 4});
     });
 });
