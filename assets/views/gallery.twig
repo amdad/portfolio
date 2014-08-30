@@ -4,10 +4,20 @@
 <div class="container">
 	<h1>Gallery</h1>
 	{% for item in data %}
-	<div class="row project">
-		<div class="col-md-6 device">
 			{% set type = item.data.device|default('macbook') %}
 			{% set dir = item.data.Orientation|default('landscape') %}
+	<div class="row project {{ type }}-{{ dir }}">
+		{% if loop.index is even %}
+		<div class="col-md-6 content even">
+			<div class="wrapper">
+				<h2>{{ item.data.Title }}</h2>
+				<p class="desc">{{ item.data.caption }}</p>
+				<p>{{ item.data.tags }}</p>
+				<a href="{{ item.data.url }}" class="btn">visit</a>
+			</div>
+		</div>
+		{% endif %}
+		<div class="col-md-6">
 			<div class="device-mockup" data-device="{{ type }}" data-orientation="{{ dir }}" data-color="black">
     			<div class="device">
         			<div class="screen horizontal">
@@ -27,7 +37,8 @@
     			</div>
 			</div>
 		</div>
-		<div class="col-md-6 content">
+		{% if loop.index is odd %}
+		<div class="col-md-6 content odd">
 			<div class="wrapper">
 				<h2>{{ item.data.Title }}</h2>
 				<p class="desc">{{ item.data.caption }}</p>
@@ -35,6 +46,7 @@
 				<a href="{{ item.data.url }}" class="btn">visit</a>
 			</div>
 		</div>
+		{% endif %}
 	</div>
 	{% endfor %}
 </div>

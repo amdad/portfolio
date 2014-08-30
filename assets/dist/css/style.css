@@ -4907,28 +4907,51 @@ a.btn {
     border-color: #ec6f66;
     color: #fff; }
 
-.project .device {
-  z-index: 9999; }
-.project .content .wrapper {
-  position: absolute;
-  width: 100%;
+.project {
+  margin: 0 0 0 -50px; }
+  .project .device {
+    z-index: 9999; }
+  .project .content .wrapper {
+    position: absolute;
+    z-index: 0;
+    background-color: #eeeeee;
+    border-radius: 5px;
+    margin: 50px 0;
+    padding-right: 15px;
+    padding-bottom: 5px; }
+    @media (max-width: 991px) {
+      .project .content .wrapper {
+        position: inherit;
+        left: 0;
+        padding: inherit;
+        margin: inherit; } }
+    .project .content .wrapper h2 {
+      text-align: left;
+      font-size: 1.3em; }
+
+.content.odd .wrapper {
   left: -100px;
-  padding-left: 50px;
-  z-index: 0;
-  background-color: #eeeeee;
-  border-radius: 5px;
-  margin: 50px 0;
-  padding-right: 15px;
-  padding-bottom: 5px; }
-  @media (max-width: 991px) {
-    .project .content .wrapper {
-      position: inherit;
-      left: 0;
-      padding: inherit;
-      margin: inherit; } }
-  .project .content .wrapper h2 {
-    text-align: left;
-    font-size: 1.3em; }
+  right: 0; }
+
+.content.even .wrapper {
+  right: -125px;
+  left: 0;
+  text-align: right;
+  padding-left: 15px; }
+  .content.even .wrapper h2 {
+    text-align: right; }
+
+.ipad-landscape .content.odd .wrapper {
+  padding-left: 85px; }
+
+.macbook-landscape .content.odd .wrapper, .macbook-portrait .content .wrapper {
+  padding-left: 50px; }
+
+.ipad-landscape .content.even .wrapper {
+  padding-right: 110px; }
+
+.macbook-landscape .content.even .wrapper, .macbook-portrait .content .wrapper {
+  padding-right: 75px; }
 
 .screen.horizontal img {
   max-width: 100%;

@@ -432,14 +432,12 @@ a.btn{
 }
 
 .project{
+	margin:0 0 0 -50px;
 	.device{
 		z-index:9999;
 	}
 	.content .wrapper{
 		position:absolute;
-		width:100%;
-		left:-100px;
-		padding-left:50px;
 		z-index:0;
 		background-color:$lightgray;
 		border-radius: 5px;
@@ -462,6 +460,33 @@ a.btn{
 		.btn{
 		}
 	}
+}
+.content.odd .wrapper{
+	left:-100px;
+	right:0;
+}
+.content.even .wrapper{
+	right:-125px;
+	left:0;
+	text-align:right;
+	padding-left:15px;
+
+	h2{
+		text-align:right;
+	}
+}
+
+.ipad-landscape .content.odd .wrapper{
+	padding-left:85px;
+}
+.macbook-landscape .content.odd .wrapper, .macbook-portrait .content .wrapper{
+	padding-left:50px;
+}
+.ipad-landscape .content.even .wrapper{
+	padding-right:110px;
+}
+.macbook-landscape .content.even .wrapper, .macbook-portrait .content .wrapper{
+	padding-right:75px;
 }
 
 .screen.horizontal img{
