@@ -2,8 +2,25 @@
 
     {{ $app->assets(['collections:assets/collections.js','collections:assets/js/entries.js'], $app['cockpit/version']) }}
 
+    @if($collection['sortfield'] == 'custom-order')
+
+        {{ $app->assets(['assets:vendor/uikit/js/addons/sortable.min.js'], $app['cockpit/version']) }}
+
+    @endif
+
     <style>
         td .uk-grid+.uk-grid { margin-top: 5px; }
+
+        .uk-sortable-dragged {
+            border: 1px #ccc dashed;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        .uk-sortable-dragged td {
+            display: none;
+        }
     </style>
 
     <script>
@@ -13,6 +30,7 @@
 @end('header')
 
 
+
 <div data-ng-controller="entries" ng-cloak>
 
     <nav class="uk-navbar uk-margin-bottom">
@@ -20,9 +38,12 @@
         <ul class="uk-navbar-nav">
             @hasaccess?("Collections", 'manage.collections')
             <li><a href="@route('/collections/collection/'.$collection["_id"])" title="@lang('Edit collection')" data-uk-tooltip="{pos:'bottom'}"><i class="uk-icon-pencil"></i></a></li>
+            <li><a class="uk-text-danger" ng-click="emptytable()" title="@lang('Empty collection')" data-uk-tooltip="{pos:'bottom'}"><i class="uk-icon-trash-o"></i></a></li>
             @end
             <li><a href="@route('/collections/entry/'.$collection["_id"])" title="@lang('Add entry')" data-uk-tooltip="{pos:'bottom'}"><i class="uk-icon-plus-circle"></i></a></li>
         </ul>
+
+        @if($collection['sortfield'] != 'custom-order')
         <div class="uk-navbar-content" data-ng-show="collection && collection.count">
             <form class="uk-form uk-margin-remove uk-display-inline-block" method="get" action="?nc={{ time() }}">
                 <div class="uk-form-icon">
@@ -32,13 +53,17 @@
                 </div>
             </form>
         </div>
+        @endif
+
         <div class="uk-navbar-flip">
             @hasaccess?("Collections", 'manage.collections')
-            <div class="uk-navbar-content" data-ng-show="entries && entries.length">
-                <a class="uk-button" href="@route('/api/collections/export/'.$collection['_id'])" download="{{ $collection['name'] }}.json" title="@lang('Export data')" data-uk-tooltip="{pos:'bottom'}">
-                    <i class="uk-icon-share-alt"></i>
-                </a>
-            </div>
+            <ul class="uk-navbar-nav">
+                <li>
+                    <a href="@route('/api/collections/export/'.$collection['_id'])" download="{{ $collection['name'] }}.json" title="@lang('Export data')" data-uk-tooltip="{pos:'bottom'}">
+                        <i class="uk-icon-share-alt"></i>
+                    </a>
+                </li>
+            </ul>
             @end
         </div>
     </nav>
@@ -62,7 +87,7 @@
 
         <div class="uk-width-1-1">
             <div class="app-panel">
-                <table class="uk-table uk-table-striped" multiple-select="{model:entries}">
+                <table id="entries-table" class="uk-table uk-table-striped" multiple-select="{model:entries}">
                     <thead>
                         <tr>
                             <th width="10"><input class="js-select-all" type="checkbox"></th>
@@ -73,7 +98,7 @@
                             <th width="10%">&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody {{ $collection['sortfield'] == 'custom-order' ? 'data-uk-sortable="{animation:false}"':'' }}>
                         <tr class="js-multiple-select" data-ng-repeat="entry in entries track by entry._id">
                             <td><input class="js-select" type="checkbox"></td>
                             <td>
@@ -103,7 +128,9 @@
                 </table>
 
                 <div class="uk-margin-top">
+                    @if($collection['sortfield'] != 'custom-order')
                     <button class="uk-button uk-button-primary" data-ng-click="loadmore()" data-ng-show="entries && !nomore">@lang('Load more...')</button>
+                    @endif
                     <button class="uk-button uk-button-danger" data-ng-click="removeSelected()" data-ng-show="selected"><i class="uk-icon-trash-o"></i> @lang('Delete entries')</button>
                 </div>
 

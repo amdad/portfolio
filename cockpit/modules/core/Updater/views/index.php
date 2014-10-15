@@ -2,9 +2,9 @@
 
 <h1><a href="@route('/settingspage')">@lang('Settings')</a> / @lang('Update')</h1>
 
-<div class="app-panel" data-ng-controller="updater" ng-cloak>
+<div class="uk-margin-large-top" data-ng-controller="updater" ng-cloak>
 
-    <div class="uk-text-center" ng-show="loading">
+    <div class="uk-text-center uk-width-medium-1-2 uk-container-center" ng-show="loading">
 
         <h2><i class="uk-icon-spinner uk-icon-spin"></i></h2>
         <p class="uk-text-large">
@@ -13,7 +13,7 @@
 
     </div>
 
-    <div class="uk-text-center uk-animation-shake" ng-if="data && data.error">
+    <div class="uk-text-center uk-width-medium-1-2 uk-container-center uk-animation-shake" ng-if="data && data.error">
 
         <h2><i class="uk-icon-bolt"></i></h2>
         <p class="uk-text-large">
@@ -23,32 +23,34 @@
     </div>
 
 
-    <div class="uk-text-center uk-animation-fade" ng-if="data && !data.error">
+    <div ng-if="data && !data.error">
 
-        <div ng-if="version_compare(data.local.version, data.current.version, '<=')">
-            <h2><i class="uk-icon-thumbs-o-up"></i></h2>
-            <p class="uk-text-large">
-                <strong>@@ data.current.version @@</strong>
-            </p>
-            <p class="uk-text-large">
-                @lang('You\'re running the latest version.')
-            </p>
-            <p>
-                <button class="uk-button uk-button-large uk-button-primary" ng-click="installCurrent()"><i class="uk-icon-refresh"></i> &nbsp; @lang('Re-Install')</button>
-            </p>
-        </div>
+        <div class="uk-grid" data-uk-grid-margin>
 
-        <div ng-if="version_compare(data.local.version, data.current.version, '>')">
-            <h2><i class="uk-icon-bullhorn"></i></h2>
-            <p class="uk-text-large">
-                <span class="uk-text-muted">@@ data.local.version @@</span> / <strong>@@ data.current.version @@</strong>
-            </p>
-            <p class="uk-text-large">
-                @lang('A newer version exists.')
-            </p>
-            <p>
-                <button class="uk-button uk-button-large uk-button-primary" ng-click="installCurrent()"><i class="uk-icon-magic"></i> &nbsp; @lang('Update now')</button>
-            </p>
+            <div class="uk-width-medium-1-2">
+
+                <div class="app-panel">
+                    <div class="uk-text-bold uk-text-muted">Local</div>
+                    <div class="uk-h1 uk-text-muted">@@ data.local.version @@</div>
+
+                    <div class="uk-text-bold uk-margin-top">Latest stable</div>
+                    <div class="uk-h1">@@ data.stable.version @@</div>
+
+                    <div class="uk-alert">
+                        @lang('Don\'t forget to backup the cockpit folder before any update.')
+                    </div>
+                </div>
+
+                <div class="uk-margin-top">
+                    <button class="uk-button uk-button-primary" ng-click="install()">
+                        <span class="tn" ng-if="(data.local.version==data.stable.version)"><i class="uk-icon-refresh"></i>&nbsp; @lang('Re-Install')</span>
+                        <span class="tn" ng-if="(data.local.version!=data.stable.version)"><i class="uk-icon-cloud-download"></i>&nbsp; @lang('Update')</span>
+                    </button>
+
+                    or
+                    <a ng-click="install('master')">@lang('Install latest development version')</a> <span class="uk-badge app-badge">@lang('Danger')</span>
+                </div>
+            </div>
         </div>
 
     </div>

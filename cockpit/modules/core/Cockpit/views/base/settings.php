@@ -63,6 +63,17 @@
         </div>
         @endif
 
+        @if($app->module("auth")->hasaccess("Datastore", "manage.datastore"))
+        <div class="uk-margin-bottom">
+            <div>
+                <i class="uk-icon-database"></i>
+            </div>
+            <div class="uk-text-truncate">
+                <a href="@route('/datastore')">@lang('Datastore')</a>
+            </div>
+        </div>
+        @endif
+
         @if($app->module("auth")->hasaccess("Cockpit", "manage.backups"))
         <div class="uk-margin-bottom">
             <div>
@@ -74,7 +85,6 @@
         </div>
         @endif
 
-        <!--
         @if($app["user"]["group"]=="admin")
         <div class="uk-margin-bottom">
             <div>
@@ -85,7 +95,6 @@
             </div>
         </div>
         @endif
-        -->
 
         @if($app["user"]["group"]=="admin")
         <div class="uk-margin-bottom">

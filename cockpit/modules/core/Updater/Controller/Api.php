@@ -15,8 +15,8 @@ class Api extends \Cockpit\Controller {
         $data = @file_get_contents($info['check_url']);
 
         if (strlen($data) && $json = json_decode($data, true)) {
-            $return["local"]   = $info;
-            $return["current"] = $json;
+            $return["local"]  = $info;
+            $return["stable"] = $json;
         } else {
             $return["error"] = $this->app->helper("i18n")->get("Failed loading package information");
         }
@@ -29,21 +29,44 @@ class Api extends \Cockpit\Controller {
 
         set_time_limit(0);
 
-        if ($version = $this->param("version", false)) {
+        $info    = json_decode($this->app->helper("fs")->read("#root:package.json"), true);
+        $message = '';
+        $success = false;
+
+        if ($info && $version = $this->param("version", false)) {
 
             switch ($step) {
-                // upload
+                // download release
                 case 1:
 
-                    $success = false;
+                    $zipurl  = str_replace('%version%', $version, $info['release_zip_url']);
 
-                    if(file_put_contents($this->app->path("tmp:")."/{$version}.zip", $handle = fopen("https://github.com/aheinze/cockpit/archive/{$version}.zip", 'r'))) {
-                        $success = true;
+                    if (!is_writable($this->app->path('#root:'))) {
+                        $message = 'Cockpit folder is not writable!';
+                    } else {
+
+                        if (file_put_contents($this->app->path("tmp:")."/{$version}.zip", $handle = @fopen($zipurl, 'r'))) {
+
+                            $success = true;
+
+                            if ($this->param("backup", true)) {
+
+                                // backup current Cockpit version
+                                $filename = time().'.cockpit-'.$info['version'].'.zip';
+
+                                $this->app->helper("backup")->backup($this->app->path('#root:'), $this->app->path("#backups:")."/{$filename}", function($file) {
+                                    return preg_match('/cache/', $file) && !preg_match('/index\.html/', $file) || preg_match('/backups/', $file) && !preg_match('/index\.html/', $file);
+                                });
+                            }
+
+                        } else {
+                            $message = "Couldn't download {$version} release!";
+                        }
+
+                        @fclose($handle);
                     }
 
-                    @fclose($handle);
-
-                    return json_encode(["success" => $success]);
+                    return json_encode(["success" => $success, "message" => $message]);
 
                     break;
 
@@ -61,22 +84,19 @@ class Api extends \Cockpit\Controller {
 
                             $success = $zip->extractTo($folder) ? $zip->close() : false;
 
-                            return json_encode(["success" => $success]);
-
-                        } else {
-                            return '{"success": false}';
                         }
-
-                    } else {
-                        return '{"success": false}';
                     }
+
+                    if (!$success) {
+                        $message = 'Extracting release file failed!';
+                    }
+
+                    return json_encode(["success" => $success, "message" => $message]);
 
                     break;
 
                 // override
                 case 3:
-
-                    $success = false;
 
                     if ($folder = $this->app->path("tmp:{$version}")) {
 
@@ -86,7 +106,7 @@ class Api extends \Cockpit\Controller {
 
                         // find cockpit dist root
                         foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($folder)) as $file) {
-                            if($file->getFilename() == 'package.json') {
+                            if ($file->getFilename() == 'package.json') {
                                 $distroot = dirname($file->getRealPath());
                                 break;
                             }
@@ -100,8 +120,8 @@ class Api extends \Cockpit\Controller {
 
                             foreach ($files as $file) {
 
-                                if(!$file->isFile()) continue;
-                                if(preg_match('/(custom\/|storage\/|custom\/|modules\/addons)/', $file)) continue;
+                                if (!$file->isFile()) continue;
+                                if (preg_match('/(custom\/|storage\/|modules\/addons)/', $file)) continue;
 
                                 @unlink($file->getRealPath());
                             }
@@ -110,11 +130,16 @@ class Api extends \Cockpit\Controller {
                             $fs->copy($distroot, $root);
                         }
 
-                        $success = $distroot ? true : false;
+                        $fs->delete($folder);
 
+                        $success = $distroot ? true : false;
                     }
 
-                    return json_encode(["success" => $success]);
+                    if (!$success) {
+                        $message = 'Override current release failed!';
+                    }
+
+                    return json_encode(["success" => $success, "message" => $message]);
 
                     break;
 
@@ -132,5 +157,4 @@ class Api extends \Cockpit\Controller {
 
         return false;
     }
-
 }

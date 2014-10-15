@@ -3,6 +3,8 @@
     {{ $app->assets(['collections:assets/collections.js','collections:assets/js/collection.js'], $app['cockpit/version']) }}
     {{ $app->assets(['assets:vendor/uikit/js/addons/nestable.min.js'], $app['cockpit/version']) }}
 
+    @trigger('cockpit.content.fields.sources')
+
 @end('header')
 
 <div data-ng-controller="collection" data-id="{{ $id }}" ng-cloak>
@@ -20,7 +22,10 @@
             <div class="uk-width-3-4">
 
                     <div class="uk-form-row">
-                        <input class="uk-width-1-1 uk-form-large" type="text" placeholder="@lang('Name')" data-ng-model="collection.name" pattern="[a-zA-Z0-9\s]+" required>
+                        <input class="uk-width-1-1 uk-form-large" type="text" placeholder="@lang('Name')" data-ng-model="collection.name" required>
+                        <div class="uk-margin-top">
+                            <input class="uk-width-1-1 uk-form-blank uk-text-muted" type="text" data-ng-model="collection.slug" app-slug="collection.name" placeholder="@lang('Slug...')" title="slug" data-uk-tooltip="{pos:'left'}">
+                        </div>
                     </div>
 
                     <div class="uk-form-row uk-margin uk-text-center" data-ng-show="!collection.fields || !collection.fields.length">
@@ -45,7 +50,7 @@
 
                                     <div class="uk-grid uk-grid-small">
                                         <div class="uk-width-3-4">
-                                            <input class="uk-width-1-1 uk-form-blank" type="text" data-ng-model="field.name" placeholder="@lang('Field name')" pattern="[a-zA-Z0-9]+" required>
+                                            <input class="uk-width-1-1 uk-form-blank" type="text" data-ng-model="field.name" placeholder="@lang('Field name')" pattern="[a-zA-Z0-9_]+" required>
                                         </div>
                                         <div class="uk-width-1-4 uk-text-right">
                                             <a ng-click="toggleOptions($index)"><i class="uk-icon-cog"></i></a>
@@ -58,22 +63,7 @@
                                         <div class="uk-grid uk-grid-small">
                                             <div class="uk-width-1-3">
                                                 <label class="uk-text-small">@lang('Field type')</label>
-                                                <select class="uk-width-1-1" data-ng-model="field.type" title="@lang('Field type')">
-                                                    <option value="text">Text</option>
-                                                    <option value="select">Select</option>
-                                                    <option value="boolean">Boolean</option>
-                                                    <option value="html">Html</option>
-                                                    <option value="wysiwyg">Html (WYSIWYG)</option>
-                                                    <option value="code">Code</option>
-                                                    <option value="markdown">Markdown</option>
-                                                    <option value="date">Date</option>
-                                                    <option value="time">Time</option>
-                                                    <option value="media">Media</option>
-                                                    <option value="region">Region</option>
-                                                    <option value="link-collection">Collection link</option>
-                                                    <option value="gallery">Gallery</option>
-                                                    <option value="tags">Tags</option>
-                                                </select>
+                                                <select class="uk-width-1-1" data-ng-model="field.type" title="@lang('Field type')" ng-options="f.name as f.label for f in contentfields"></select>
                                             </div>
                                             <div class="uk-width-1-3">
                                                 <label class="uk-text-small">@lang('Field label')</label>
@@ -103,6 +93,15 @@
                                                             <input type="checkbox" data-ng-model="field.slug" />
                                                         </div>
                                                     </div>
+
+                                                    @if(count($locales))
+                                                    <div class="uk-form-row">
+                                                        <label class="uk-form-label">@lang('Localize')</label>
+                                                        <div class="uk-form-controls">
+                                                            <input type="checkbox" data-ng-model="field.localize" />
+                                                        </div>
+                                                    </div>
+                                                    @endif
 
                                                     <div class="uk-form-row" data-ng-if="field.type=='select'">
                                                         <label class="uk-form-label">@lang('Options')</label>
@@ -139,11 +138,12 @@
                                                         </div>
                                                     </div>
 
+                                                    @trigger('cockpit.content.fields.settings')
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
 
                                 </div>
                             </li>
@@ -157,7 +157,7 @@
                     <div class="uk-form-row" data-ng-show="collection.fields && collection.fields.length">
                         <div class="uk-button-group">
                             <button type="submit" class="uk-button uk-button-primary uk-button-large">@lang('Save Collection')</button>
-                            <a href="@route('/collections/entries')/@@ collection._id @@" class="uk-button uk-button-large" data-ng-show="collection._id"><i class="uk-icon-bars"></i> @lang('Goto entries')</a>
+                            <a href="@route('/collections/entries')/@@ collection._id @@" class="uk-button uk-button-large" data-ng-show="collection._id"><i class="uk-icon-list"></i> @lang('Goto entries')</a>
                         </div>
                         &nbsp;
                         <a href="@route('/collections')">@lang('Cancel')</a>
@@ -187,7 +187,7 @@
                         @lang('Fields on entries list page'):
                     </p>
                     <ul id="fields-list" class="uk-nestable" data-uk-nestable="{maxDepth:1}">
-                        <li data-ng-repeat="field in collection.fields">
+                        <li class="uk-nestable-list-item" data-ng-repeat="field in collection.fields">
                             <div class="uk-nestable-item uk-nestable-item-table">
                                 <div class="uk-nestable-handle"></div>
                                 <input type="checkbox" data-ng-checked="field.lst" data-ng-model="field.lst">
@@ -201,7 +201,8 @@
                     <p>
                         @lang('Order entries on list page'):
                     </p>
-                    <select class="uk-width-1-1 uk-margin-bottom" data-ng-model="collection.sortfield" ng-options="f.name as f.name for f in getSortFields()"></select>
+
+                    <select class="uk-width-1-1 uk-margin-bottom" data-ng-model="collection.sortfield"  ng-options="f.name as f.name for f in sortfields"></select>
                     <select class="uk-width-1-1" data-ng-model="collection.sortorder">
                         <option value="-1">@lang('descending')</option>
                         <option value="1">@lang('ascending')</option>

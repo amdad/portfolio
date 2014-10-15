@@ -1,30 +1,61 @@
 (function($){
 
-    App.module.controller("entry", function($scope, $rootScope, $http, $timeout){
+    App.module.controller("entry", function($scope, $rootScope, $http, $timeout, Contentfields){
 
         var collection = COLLECTION,
-            entry      = COLLECTION_ENTRY || {};
+            entry      = COLLECTION_ENTRY || {},
+            locales    = LOCALES || [];
+
+        // init entry and its fields
+        if (collection.fields && collection.fields.length) {
+
+            collection.fields.forEach(function(field){
+
+                // default values
+                if (!entry["_id"] && field["default"]) {
+                    entry[field.name] = field["default"];
+                }
+
+                // localize fields
+                if (locales.length && field["localize"]) {
+
+                    if (!entry[field.name]) {
+                        entry[field.name] = '';
+                    }
+
+
+                    locales.forEach(function(locale){
+                        if (!entry[field.name+'_'+locale]) {
+                            entry[field.name+'_'+locale] = '';
+                        }
+                    });
+
+                    $scope.hasLocals = true;
+                }
+            });
+        }
 
         $scope.collection = collection;
         $scope.entry      = entry;
         $scope.versions   = [];
+        $scope.locales    = locales;
+        $scope.locale     = '';
 
-        // init entry with default values
-        if(!entry["_id"] && collection.fields && collection.fields.length) {
-            collection.fields.forEach(function(field){
-                if(field["default"]) entry[field.name] = field["default"];
+        if (locales.length) {
+            $scope.$watch('locale', function(newValue, oldValue){
+                if (newValue !== oldValue) $scope.collection = angular.copy($scope.collection);
             });
         }
 
         $scope.loadVersions = function() {
 
-            if(!$scope.entry["_id"]) {
+            if (!$scope.entry["_id"]) {
                 return;
             }
 
             $http.post(App.route("/api/collections/getVersions"), {"id":$scope.entry["_id"], "colId":$scope.collection["_id"]}).success(function(data){
 
-                if(data) {
+                if (data) {
                     $scope.versions = data;
                 }
 
@@ -33,7 +64,7 @@
 
         $scope.clearVersions = function() {
 
-            if(!$scope.entry["_id"]) {
+            if (!$scope.entry["_id"]) {
                 return;
             }
 
@@ -50,7 +81,7 @@
 
         $scope.restoreVersion = function(versionId) {
 
-            if(!versionId || !$scope.entry["_id"]) {
+            if (!versionId || !$scope.entry["_id"]) {
                 return;
             }
 
@@ -76,7 +107,7 @@
             if ($scope.validateForm(entry)) {
                 $http.post(App.route("/api/collections/saveentry"), {"collection": collection, "entry":entry, "createversion": true}).success(function(data){
 
-                    if(data && Object.keys(data).length) {
+                    if (data && Object.keys(data).length) {
                         $scope.entry = data;
                         App.notify(App.i18n.get("Entry saved!"), "success");
 
@@ -85,6 +116,10 @@
 
                 }).error(App.module.callbacks.error.http);
             }
+        };
+
+        $scope.getFieldname = function(field) {
+            return $scope.locale && field.localize ? field.name + '_' + $scope.locale : field.name;
         };
 
         $scope.validateForm = function(entry){
@@ -103,20 +138,20 @@
 
         $scope.fieldsInArea = function(area) {
 
-            var fields = [];
+            var fields = [], aside = ['select','date','time','media','boolean','tags','region'];
 
-            if(area=="main") {
+            if (area=="main") {
 
                 fields = $scope.collection.fields.filter(function(field){
 
-                    return (['text','html', 'markdown','code','wysiwyg','markdown','gallery','link-collection'].indexOf(field.type) > -1);
+                    return aside.indexOf(field.type) == -1;
                 });
 
             }
 
-            if(area=="side"){
+            if (area=="side"){
                 fields = $scope.collection.fields.filter(function(field){
-                    return ['select','date','time','media','boolean','tags','region'].indexOf(field.type) > -1;
+                    return aside.indexOf(field.type) > -1;
                 });
             }
 

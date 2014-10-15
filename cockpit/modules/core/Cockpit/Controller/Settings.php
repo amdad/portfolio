@@ -8,9 +8,14 @@ class Settings extends \Cockpit\Controller {
     public function general() {
 
         $registry = json_encode((object)$this->app->memory->get("cockpit.api.registry", []));
-        $token    = $this->app->memory->get("cockpit.api.token", '');
+        $tokens   = $this->app->db->getKey("cockpit/settings", "cockpit.api.tokens", null);
+        $locales  = json_encode($this->app->db->getKey("cockpit/settings", "cockpit.locales", []));
 
-        return $this->render('cockpit:views/settings/general.php', compact('token', 'registry'));
+        if (!$tokens) {
+            $tokens = new \stdClass;
+        }
+
+        return $this->render('cockpit:views/settings/general.php', compact('tokens', 'registry', 'locales'));
     }
 
     public function info() {
@@ -44,7 +49,7 @@ class Settings extends \Cockpit\Controller {
 
                 $email = $this->param("email", false);
 
-                if($email) {
+                if ($email) {
                     $ret = $this->app->mailer->mail($email, "Test Email", "It seems your Server can send Emails with the current mailer settings.");
                 } else {
                     $ret = false;
@@ -76,11 +81,19 @@ class Settings extends \Cockpit\Controller {
         return json_encode(["size"=>$this->app->helper("utils")->formatSize($this->app->helper("fs")->getDirSize("data:"))]);
     }
 
-    public function saveToken() {
+    public function saveTokens() {
 
-        if ($token = $this->param("token", false)) {
+        $tokens = $this->param("tokens", false);
 
-            $this->app->memory->set("cockpit.api.token", $token);
+        if ($tokens !== false) {
+
+            if (count($tokens)) {
+                $tokens = (array) $tokens;
+            } else {
+                $tokens = null;
+            }
+
+            $this->app->db->setKey("cockpit/settings", "cockpit.api.tokens", $tokens);
 
             return ["success"=>true];
         }
@@ -100,5 +113,14 @@ class Settings extends \Cockpit\Controller {
         }
 
         return false;
+    }
+
+    public function saveLocals() {
+
+        $locals = $this->param("locals", []);
+
+        $this->app->db->setKey("cockpit/settings", "cockpit.locales", $locals);
+
+        return ["success"=>true];
     }
 }

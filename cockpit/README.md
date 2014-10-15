@@ -1,5 +1,7 @@
 # Cockpit
 
+[![Bountysource](https://www.bountysource.com/badge/tracker?tracker_id=449417)](https://www.bountysource.com/trackers/449417-cockpit?utm_source=449417&utm_medium=shield&utm_campaign=TRACKER_BADGE)
+
 The CMS for developers. Add content management functionality to any site - plug &amp; play CMS.
 Manage content like collections, regions, forms and galleries which you can reuse anywhere on your website.
 
@@ -17,11 +19,7 @@ Manage content like collections, regions, forms and galleries which you can reus
 * PDO + SQLite (or MongoDB)
 * GD extension
 
-make also sure that 
-    
-    $_SERVER['DOCUMENT_ROOT'] + $_SERVER["PATH_INFO"]
-
-exists and is set correctly
+make also sure that <code>$_SERVER['DOCUMENT_ROOT']</code> exists and is set correctly.
 
 
 ### Installation
@@ -39,14 +37,14 @@ Embedding Cockpit is really easy. Just include the following snippet anywhere yo
 
 ```php
 // make cockpit api available
-require('path2cockpit/bootstrap.php');
+require('path/to/cockpit/bootstrap.php');
 ```
 
 **Regions**
 
 Render regions api:
 
-```php
+```html
 <div><?php region("address") ?></div>
 <div><?=get_region("address") ?></div>
 ```
@@ -55,7 +53,7 @@ Render regions api:
 
 Loop over collection data:
 
-```php
+```html
 <?php foreach(collection("posts")->find(["active"=>1]) as $post): ?>
     <div class="post">
         <h3><?=$post["title"];?></h3>
@@ -82,4 +80,25 @@ Google group: [CockpitCMS](https://groups.google.com/d/forum/cockpitcms)
 
 ### Copyright and license
 
-Copyright 2013 [Agentejo](http://www.agentejo.com) under the [MIT license](https://raw.github.com/aheinze/cockpit/master/LICENSE).
+Copyright 2013 [Agentejo](http://www.agentejo.com) under the MIT license.
+
+The MIT License (MIT)
+
+Copyright (c) 2013 Agentejo, http://agentejo.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

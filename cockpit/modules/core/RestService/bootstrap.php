@@ -4,41 +4,78 @@
 
 $this->module("restservice")->extend([
 
-    'js_lib' => function() use($app) {
+    'js_lib' => function($token = null) use($app) {
 
-        $token = $app->memory->get("cockpit.api.token", '');
-
-        return $app->script($app->routeUrl("/rest/api.js?token={$token}"));
+        return $app->script($app->routeUrl("/rest/api-js?token={$token}"));
     }
 ]);
 
 
-if(!function_exists("cockpit_js_lib")) {
-    function cockpit_js_lib() {
-        echo cockpit("restservice")->js_lib();
+if (!function_exists("cockpit_js_lib")) {
+    function cockpit_js_lib($token = null) {
+        echo cockpit("restservice")->js_lib($token);
     }
 }
 
-$app->on("before", function() use($app) {
+$app->on("before", function() {
 
     $routes = new \ArrayObject([]);
 
     /*
         $routes['{:resource}'] = string (classname) | callable
-
     */
 
-    $app->trigger("cockpit.rest.init", [$routes])->bind("/rest/api/*", function($params) use($routes, $app){
+    $this->trigger("cockpit.rest.init", [$routes])->bind("/rest/api/*", function($params) use($routes){
 
-        $token = $app->param("token", "n/a");
+        $route = $this['route'];
+        $token = $this->param("token", false);
         $path  = $params[":splat"][0];
 
-        if(!$params[":splat"][0]) {
+        if (!$token || !$params[":splat"][0]) {
             return false;
         }
 
-        if($token !== $app->memory->get("cockpit.api.token", false)) {
-            $app->response->status = 401;
+        $tokens = $this->db->getKey("cockpit/settings", "cockpit.api.tokens", []);
+
+        if (!isset($tokens[$token])) {
+            $this->response->status = 401;
+            return ["error" => "access denied"];
+        }
+
+
+        // rules validation
+        $rules = trim(preg_replace('/#(.+)/', '', $tokens[$token])); // trim and replace comments
+        $pass  = false;
+
+        if ($rules == '') {
+            $pass = true;
+        } else {
+
+            $lines = explode("\n", $rules);
+
+            // validate every rule
+            foreach ($lines as $rule) {
+
+                $rule = trim($rule);
+
+                if (!$rule) continue;
+
+                $ret  = $rule[0] == '!' ? false : true;
+
+                if (!$ret) {
+                    $rule = substr($rule, 1);
+                }
+
+                if (preg_match("#{$rule}#", $route)) {
+                    $pass = $ret;
+                    break;
+                }
+            }
+        }
+
+        // deny access
+        if (!$pass) {
+            $this->response->status = 401;
             return ["error" => "access denied"];
         }
 
@@ -46,17 +83,17 @@ $app->on("before", function() use($app) {
         $resource   = $parts[0];
         $params     = isset($parts[1]) ? explode('/', $parts[1]) : [];
 
-        if(isset($routes[$resource])) {
+        if (isset($routes[$resource])) {
 
             // invoke class
-            if(is_string($routes[$resource])) {
+            if (is_string($routes[$resource])) {
 
                 $action = count($params) ? array_shift($params):'index';
 
-                return $app->invoke($routes[$resource], $action, $params);
+                return $this->invoke($routes[$resource], $action, $params);
             }
 
-            if(is_callable($routes[$resource])) {
+            if (is_callable($routes[$resource])) {
                 return call_user_func_array($routes[$resource], $params);
             }
         }
@@ -66,12 +103,12 @@ $app->on("before", function() use($app) {
 
 });
 
-$app->bind("/rest/api.js", function() use($app){
+$app->bind("/rest/api-js", function() {
 
-    $token    = $app->param("token", "");
-    $registry = json_encode((object)$app->memory->get("cockpit.api.registry", []));
+    $token    = $this->param("token", "");
+    $registry = json_encode((object)$this->memory->get("cockpit.api.registry", []));
 
-    $app->response->mime = "js";
+    $this->response->mime = "js";
 
-    return $app->view('restservice:views/api.js', compact('token', 'registry'));
+    return $this->view('restservice:views/api.js', compact('token', 'registry'));
 });

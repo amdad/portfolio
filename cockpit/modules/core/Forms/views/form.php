@@ -22,7 +22,7 @@
                 <div class="app-panel">
 
                     <div class="uk-form-row">
-                        <input class="uk-width-1-1 uk-form-large" type="text" placeholder="@lang('Name')" data-ng-model="form.name" pattern="[a-zA-Z0-9\s]+" required>
+                        <input class="uk-width-1-1 uk-form-large" type="text" placeholder="@lang('Name')" data-ng-model="form.name" required>
                     </div>
 
                     <div class="uk-form-row">
@@ -30,7 +30,7 @@
                         <input class="uk-width-1-1 uk-form-large" type="text" placeholder="@lang('Email form data to this adress')" data-ng-model="form.email">
 
                         <div class="uk-alert">
-                            @lang('Leave the field empty if you don\'t want to recieve any form data via email.')
+                            @lang('Leave the email field empty if you don\'t want to recieve any form data via email.')
                         </div>
                     </div>
 
@@ -42,7 +42,7 @@
 
                         <div class="uk-button-group">
                             <button type="submit" class="uk-button uk-button-primary uk-button-large">@lang('Save form')</button>
-                            <a href="@route('/forms/entries')/@@ form._id @@" class="uk-button uk-button-large" data-ng-show="form._id"><i class="uk-icon-bars"></i> @lang('Goto entries')</a>
+                            <a href="@route('/forms/entries')/@@ form._id @@" class="uk-button uk-button-large" data-ng-show="form._id"><i class="uk-icon-list"></i> @lang('Goto entries')</a>
                         </div>
                         &nbsp;
                         <a href="@route('/forms')">@lang('Cancel')</a>
@@ -56,7 +56,7 @@
                 <div class="uk-margin" ng-show="form.name">
                     <strong>@lang('Form snippet example'):</strong>
 
-<pre><code><strong>&lt;?php form('@@form.name@@'); ?&gt;</strong>
+<highlightcode>&lt;?php form('@@form.name@@'); ?&gt;
     &lt;p&gt;
         &lt;label&gt;Name&lt;/label&gt;
         &lt;input type="text" name="<i>form</i>[name]" required&gt;
@@ -68,7 +68,7 @@
     &lt;p&gt;
         &lt;button type="submit"&gt;Send&lt;/button&gt;
     &lt;/p&gt;
-&lt;/form&gt;</code></pre>
+&lt;/form&gt;</highlightcode>
 
 <div class="uk-alert uk-alert-info">
     <i class="uk-icon-exclamation-circle"></i>

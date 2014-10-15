@@ -5,10 +5,10 @@ portfolio
 
 todo's:
 -------
-* create test database (.tst)
-* create unit tests
+
 * further cleanup project structure
-* create theme + layout
-* check ability to use cockpit via composer (in vendor dir)
-    * extract DB
-    * extract config
+* finalize portfolio + csv
+* single blog layout + comments
+* nice to have's
+    * extract DB from cockpit folder
+    * extract config from cockpit folder

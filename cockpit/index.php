@@ -2,33 +2,57 @@
 
 define('COCKPIT_ADMIN', 1);
 
-date_default_timezone_set('UTC');
-
-// $_SERVER['PATH_INFO'] fix for nginx >:-/
-
-if (!isset($_SERVER['PATH_INFO']) && strpos($_SERVER['REQUEST_URI'], $_SERVER['PHP_SELF'])===0) {
-
-    $_URI  = preg_replace('/\?(.*)/', '', $_SERVER['REQUEST_URI']);
-    $_SELF = $_SERVER['PHP_SELF'];
-    $_PATH = substr($_URI, strlen($_SELF));
-
-    if ($_PATH && $_PATH[0] == '/') $_SERVER['PATH_INFO'] = $_PATH;
+// set default url rewrite setting
+if (!isset($_SERVER['COCKPIT_URL_REWRITE'])) {
+    $_SERVER['COCKPIT_URL_REWRITE'] = 'Off';
 }
 
+// set default timezone
+date_default_timezone_set('UTC');
+
+// handle php webserver
+if (PHP_SAPI == 'cli-server' && is_file(__DIR__.parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) {
+    return false;
+}
+
+// bootstrap cockpit
 require(__DIR__.'/bootstrap.php');
 
-$cockpit->on("after", function() use($cockpit) {
+// handle error pages
+$cockpit->on("after", function() {
 
-    switch ($cockpit->response->status) {
+    switch ($this->response->status) {
         case 500:
-        case 404:
-            if ($cockpit->req_is('ajax')) {
-                $cockpit->response->body = '{"error": "'.$cockpit->response->status.'"}';
+
+            if ($this['debug']) {
+
+                if ($this->req_is('ajax')) {
+                    $this->response->body = json_encode(['error' => json_decode($this->response->body, true)]);
+                } else {
+                    $this->response->body = $this->render("cockpit:views/errors/500-debug.php", ['error' => json_decode($this->response->body, true)]);
+                }
+
             } else {
-                $cockpit->response->body = $cockpit->view("cockpit:views/errors/{$cockpit->response->status}.php");
+
+                if ($this->req_is('ajax')) {
+                    $this->response->body = '{"error": "500", "message": "system error"}';
+                } else {
+                    $this->response->body = $this->view("cockpit:views/errors/500.php");
+                }
+            }
+
+            break;
+
+        case 404:
+
+            if ($this->req_is('ajax')) {
+                $this->response->body = '{"error": "404", "message":"File not found"}';
+            } else {
+                $this->response->body = $this->view("cockpit:views/errors/404.php");
             }
             break;
     }
 });
 
-$cockpit->trigger("admin.init")->run();
+// run backend
+$cockpit->set('route', COCKPIT_ADMIN_ROUTE)->trigger("admin.init")->run();

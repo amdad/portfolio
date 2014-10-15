@@ -3,8 +3,11 @@
     {{ $app->assets(['assets:vendor/uikit/js/addons/sortable.min.js'], $app['cockpit/version']) }}
     {{ $app->assets(['assets:vendor/uikit/js/addons/nestable.min.js'], $app['cockpit/version']) }}
 
+    {{ $app->assets(['mediamanager:assets/pathpicker.js'], $app['cockpit/version']) }}
+
     {{ $app->assets(['galleries:assets/galleries.js','galleries:assets/js/gallery.js'], $app['cockpit/version']) }}
-    {{ $app->assets(['mediamanager:assets/pathpicker.directive.js'], $app['cockpit/version']) }}
+
+    @trigger('cockpit.content.fields.sources')
 
     <style>
 
@@ -55,7 +58,10 @@
                     <div class="app-panel">
 
                         <div class="uk-form-row">
-                            <input class="uk-width-1-1 uk-form-large" type="text" placeholder="@lang('Name')" data-ng-model="gallery.name" pattern="[a-zA-Z0-9\s]+" required>
+                            <input class="uk-width-1-1 uk-form-large" type="text" placeholder="@lang('Name')" data-ng-model="gallery.name" required>
+                            <div class="uk-margin-top">
+                                <input class="uk-width-1-1 uk-form-blank uk-text-muted" type="text" data-ng-model="gallery.slug" app-slug="gallery.name" placeholder="@lang('Slug...')" title="slug" data-uk-tooltip="{pos:'left'}">
+                            </div>
                         </div>
 
                         <div class="uk-form-row">
@@ -80,8 +86,8 @@
 
 
                                 <div class="uk-text-center uk-margin-large-top uk-margin-large-bottom" data-ng-show="gallery && !gallery.images.length">
-                                    <h2><i class="uk-icon-th"></i></h2>
-                                    <p class="uk-text-large">
+                                    <h2 class="uk-text-muted"><i class="uk-icon-th"></i></h2>
+                                    <p class="uk-text-muted uk-text-large">
                                         @lang('You don\'t have any images in this gallery.')
                                     </p>
                                 </div>
@@ -91,22 +97,70 @@
                             <div data-ng-show="managefields">
 
                                 <ul id="manage-fields-list" class="uk-nestable" data-uk-nestable="{maxDepth:1}">
-                                     <li data-ng-repeat="field in gallery.fields">
+                                     <li class="uk-nestable-list-item" data-ng-repeat="field in gallery.fields">
                                         <div class="uk-nestable-item uk-nestable-item-table">
-                                           <div class="uk-nestable-handle"></div>
-                                           <input type="text" data-ng-model="field.name" placeholder="Field name" pattern="[a-zA-Z0-9]+" required>
-                                           <select data-ng-model="field.type" title="@lang('Field type')" data-uk-tooltip>
-                                               <option value="text">Text</option>
-                                               <option value="html">Html</option>
-                                               <option value="select">Select</option>
-                                               <option value="boolean">Boolean</option>
-                                               <option value="media">Media</option>
-                                           </select>
 
-                                           <input type="text" data-ng-if="field.type=='select'" data-ng-model="field.options" ng-list placeholder="@lang('options...')">
-                                           <input type="text" data-ng-if="field.type=='media'" data-ng-model="field.allowed" placeholder="*.*" title="@lang('Allowed media types')" data-uk-tooltip>
+                                            <div class="uk-grid uk-grid-small">
+                                                <div class="uk-width-3-4">
+                                                    <div class="uk-nestable-handle"></div>
+                                                    <input class="uk-width-2-3 uk-form-blank" type="text" data-ng-model="field.name" placeholder="@lang('Field name')" pattern="[a-zA-Z0-9]+" required>
+                                                </div>
+                                                <div class="uk-width-1-4 uk-text-right">
+                                                    <a ng-click="toggleOptions($index)"><i class="uk-icon-cog"></i></a>
+                                                    <a data-ng-click="removefield(field)" class="uk-close"></a>
+                                                </div>
+                                            </div>
+                                            <div id="options-field-@@ $index @@" class="app-panel uk-margin-small-top uk-hidden">
+                                                <div class="uk-grid uk-grid-small">
+                                                    <div class="uk-width-1-2">
 
-                                           <a data-ng-click="removefield(field)" class="uk-close"></a>
+                                                        <label class="uk-text-small">@lang('Field type')</label>
+                                                        <select class="uk-width-1-1" data-ng-model="field.type" title="@lang('Field type')" ng-options="f.name as f.label for f in contentfields"></select>
+                                                    </div>
+                                                    <div class="uk-width-1-2">
+                                                        <label class="uk-text-small">@lang('Field label')</label>
+                                                        <input class="uk-width-1-1" type="text" data-ng-model="field.label" placeholder="@lang('Field label')">
+                                                    </div>
+
+                                                    <div class="uk-width-1-1 uk-grid-margin">
+
+                                                        <strong class="uk-text-small">Extra options</strong>
+                                                        <hr>
+                                                        <div class="uk-form uk-form-horizontal">
+
+                                                            <div class="uk-form-row" data-ng-if="field.type=='select'">
+                                                                <label class="uk-form-label">@lang('Options')</label>
+                                                                <div class="uk-form-controls">
+                                                                    <input class="uk-form-blank" type="text" data-ng-model="field.options" ng-list placeholder="@lang('options...')" title="@lang('Separate different options by comma')" data-uk-tooltip>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="uk-form-row" data-ng-if="field.type=='media'">
+                                                                <label class="uk-form-label">@lang('Extensions')</label>
+                                                                <div class="uk-form-controls">
+                                                                    <input class="uk-form-blank" type="text" data-ng-model="field.allowed" placeholder="*.*" title="@lang('Allowed media types')" data-uk-tooltip>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="uk-form-row" data-ng-if="field.type=='code'">
+                                                                <label class="uk-form-label">@lang('Syntax')</label>
+                                                                <div class="uk-form-controls">
+                                                                    <select data-ng-model="field.syntax" title="@lang('Code syntax')" data-uk-tooltip>
+                                                                        <option value="text">Text</option>
+                                                                        <option value="css">CSS</option>
+                                                                        <option value="htmlmixed">Html</option>
+                                                                        <option value="javascript">Javascript</option>
+                                                                        <option value="markdown">Markdown</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            @trigger('cockpit.content.fields.settings')
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                      </li>
                                 </ul>
@@ -155,7 +209,7 @@
                             </p>
                         </div>
 
-                        <button type="button" class="uk-button" data-ng-class="managefields ? 'uk-button-success':'uk-button-primary'" data-ng-click="(managefields = !managefields)" title="@lang('Manage meta fields')">
+                        <button type="button" class="uk-button" data-ng-class="managefields ? 'uk-button-success':'uk-button-primary'" data-ng-click="switchFieldsForm(managefields)" title="@lang('Manage meta fields')">
                             <span ng-show="!managefields"><i class="uk-icon-cog"></i></span>
                             <span ng-show="managefields"><i class="uk-icon-check"></i></span>
                         </button>
@@ -171,31 +225,11 @@
             <h3>@lang('Meta')</h3>
 
             <div class="uk-form uk-margin">
-                <div class="uk-form-row" data-ng-repeat="field in gallery.fields" data-ng-switch="field.type">
+                <div class="uk-form-row" data-ng-repeat="field in gallery.fields">
 
-                    <label class="uk-text-small">@@ field.name | uppercase @@</label>
+                    <label class="uk-text-small">@@ (field.label || field.name) | uppercase @@</label>
 
-                    <div data-ng-switch-when="html">
-                        <textarea class="uk-width-1-1 uk-form-large" data-ng-model="$parent.metaimage.data[field.name]"></textarea>
-                    </div>
-
-                    <div data-ng-switch-when="select">
-                        <select class="uk-width-1-1 uk-form-large" data-ng-model="$parent.metaimage.data[field.name]" data-ng-init="fieldindex=$index">
-                            <option value="@@ option @@" data-ng-repeat="option in (field.options || [])" data-ng-selected="($parent.metaimage.data[field.name]==option)">@@ option @@</option>
-                        </select>
-                    </div>
-
-                    <div data-ng-switch-when="media">
-                        <input type="text" media-path-picker="@@ field.allowed || '*' @@" data-ng-model="$parent.metaimage.data[field.name]">
-                    </div>
-
-                    <div data-ng-switch-when="boolean">
-                        <input type="checkbox" data-ng-model="$parent.metaimage.data[field.name]">
-                    </div>
-
-                    <div data-ng-switch-default>
-                        <input class="uk-width-1-1 uk-form-large" type="text" data-ng-model="$parent.metaimage.data[field.name]">
-                    </div>
+                    <contentfield options="@@ field @@" ng-model="$parent.metaimage.data[field.name]"></contentfield>
                 </div>
             </div>
 

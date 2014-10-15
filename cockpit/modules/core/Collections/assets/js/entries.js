@@ -32,11 +32,11 @@
 
         $scope.loadmore = function() {
 
-            var limit  = 25, filter = false;
+            var limit  = COLLECTION.sortfield == 'custom-order' ? 10000 : 25, filter = false;
 
-            if($scope.filter) {
+            if ($scope.filter) {
 
-                var criteria = {};
+                var criterias = [], criteria;
 
                 COLLECTION.fields.forEach(function(field){
                     switch(field.type) {
@@ -45,32 +45,35 @@
                         case 'html':
                         case 'markdown':
                         case 'wysiwyg':
+                            criteria = {};
                             criteria[field.name] = {'$regex':$scope.filter};
+                            criterias.push(criteria);
                             break;
                     }
                 });
 
-                if(Object.keys(criteria).length) filter = {'$or':criteria};
+                if (Object.keys(criteria).length) filter = {'$or':criterias};
             }
 
             $http.post(App.route("/api/collections/entries"), {
 
-                "collection": angular.copy($scope.collection),
-                "limit": limit,
-                "filter": JSON.stringify(filter),
-                "skip": $scope.entries ? $scope.entries.length : 0
+                "collection" : angular.copy($scope.collection),
+                "limit"      : limit,
+                "filter"     : JSON.stringify(filter),
+                "skip"       : $scope.entries ? $scope.entries.length : 0,
+                "sort"       : (COLLECTION.sortfield == 'custom-order' ? {"custom-order":1}:false)
 
             }, {responseType:"json"}).success(function(data){
 
-                if(data) {
+                if (data) {
 
-                    if(!$scope.entries) {
+                    if (!$scope.entries) {
                         $scope.entries = [];
                     }
 
-                    if(data.length) {
+                    if (data.length) {
 
-                        if(data.length < limit) {
+                        if (data.length < limit) {
                             $scope.nomore = true;
                         }
 
@@ -127,6 +130,48 @@
                 });
             }
         };
+
+        $scope.emptytable = function() {
+
+            App.Ui.confirm(App.i18n.get("Are you sure?"), function() {
+                $http.post(App.route("/api/collections/emptytable"), {
+
+                    "collection": angular.copy($scope.collection)
+
+                }, {responseType:"json"}).success(function(data){
+
+                    $timeout(function(){
+                        $scope.entries = [];
+                        $scope.collection.count = 0;
+                        App.notify(App.i18n.get("Done."), "success");
+                    }, 0);
+
+                }).error(App.module.callbacks.error.http);
+            });
+        };
+
+
+        var table = $("#entries-table").on("sortable-change",function(){
+
+            var entries = [];
+
+            table.find('tbody').children().each(function(i){
+
+                var entry = angular.copy($(this).scope().entry);
+
+                entry['custom-order'] = i;
+
+                $http.post(App.route("/api/collections/saveentry"), {"collection": COLLECTION, "entry":entry, "createversion": false}).success(function(data){
+
+                }).error(App.module.callbacks.error.http);
+
+                entries.push(entry);
+            });
+
+            $scope.$apply(function(){
+                $scope.entries = entries;
+            });
+        });
 
         $scope.loadmore();
     });

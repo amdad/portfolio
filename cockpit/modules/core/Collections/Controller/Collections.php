@@ -11,11 +11,13 @@ class Collections extends \Cockpit\Controller {
 
     public function collection($id = null) {
 
-        if(!$this->app->module("auth")->hasaccess("Collections", 'manage.collections')) {
+        if (!$this->app->module("auth")->hasaccess("Collections", 'manage.collections')) {
             return false;
         }
 
-        return $this->render("collections:views/collection.php", compact('id'));
+        $locales = $this->app->db->getKey("cockpit/settings", "cockpit.locales", []);
+
+        return $this->render("collections:views/collection.php", compact('id', 'locales'));
     }
 
 
@@ -23,7 +25,7 @@ class Collections extends \Cockpit\Controller {
 
         $collection = $this->app->db->findOne("common/collections", ["_id" => $id]);
 
-        if(!$collection) {
+        if (!$collection) {
             return false;
         }
 
@@ -39,20 +41,22 @@ class Collections extends \Cockpit\Controller {
         $collection = $this->app->db->findOne("common/collections", ["_id" => $collectionId]);
         $entry      = null;
 
-        if(!$collection) {
+        if (!$collection) {
             return false;
         }
 
-        if($entryId) {
+        if ($entryId) {
             $col   = "collection".$collection["_id"];
             $entry = $this->app->db->findOne("collections/{$col}", ["_id" => $entryId]);
 
-            if(!$entry) {
+            if (!$entry) {
                 return false;
             }
         }
 
-        return $this->render("collections:views/entry.php", compact('collection', 'entry'));
+		$locales = $this->app->db->getKey("cockpit/settings", "cockpit.locales", []);
+
+        return $this->render("collections:views/entry.php", compact('collection', 'entry', 'locales'));
 
     }
 

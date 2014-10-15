@@ -9,7 +9,7 @@
 
     {{ $app->assets(['mediamanager:assets/js/index.js'], $app['cockpit/version']) }}
 
-    {{ $app->assets(['assets:angular/directives/mediapreview.js'], $app['cockpit/version']) }}
+    {{ $app->assets(['assets:js/angular/directives/mediapreview.js'], $app['cockpit/version']) }}
 
 @end('header')
 
@@ -17,10 +17,10 @@
 <div data-ng-controller="mediamanager" ng-cloak>
 
     <div class="uk-navbar">
-        <span class="uk-navbar-brand">@lang('Mediamanager')</span>
+        <span class="uk-hidden-small uk-navbar-brand">@lang('Mediamanager')</span>
         <ul class="uk-navbar-nav">
             <li class="uk-parent" data-uk-dropdown>
-                <a><i class="uk-icon-star"></i>&nbsp; @lang('Bookmarks')</a>
+                <a><i class="uk-icon-star"></i><span class="uk-hidden-small">&nbsp; @lang('Bookmarks')</span></a>
                 <div class="uk-dropdown uk-dropdown-navbar">
 
                     <ul id="mmbookmarks" class="uk-nav uk-nav-navbar uk-nav-parent-icon" ng-show="(bookmarks.folders.length || bookmarks.files.length)">
@@ -43,8 +43,8 @@
                     </div>
                 </div>
             </li>
-            <li><a href="" ng-click="action('createfolder')"><i class="uk-icon-plus-circle"></i>&nbsp; @lang('Folder')</a></li>
-            <li><a href="" ng-click="action('createfile')"><i class="uk-icon-plus-circle"></i>&nbsp; @lang('File')</a></li>
+            <li><a href="" ng-click="action('createfolder')"><i class="uk-icon-plus-circle"></i><span class="uk-hidden-small">&nbsp; @lang('Folder')</span></a></li>
+            <li><a href="" ng-click="action('createfile')"><i class="uk-icon-plus-circle"></i><span class="uk-hidden-small">&nbsp; @lang('File')</span></a></li>
         </ul>
 
         <div class="uk-navbar-flip">
@@ -166,7 +166,8 @@
                                    <li class="uk-nav-header uk-text-truncate"><i class="uk-icon-folder-o"></i> @@ folder.name @@</li>
                                    <li><a ng-click="addBookmark(folder)" title="@lang('Bookmark folder')"><i class="uk-icon-star"></i> @lang('Bookmark folder')</a></li>
                                    <li><a ng-click="action('rename', folder)" title="@lang('Rename folder')"><i class="uk-icon-text-width"></i> @lang('Rename folder')</a></li>
-                                   <li><a ng-click="action('remove', folder)" title="@lang('Delete folder')"><i class="uk-icon-minus-circle"></i> @lang('Delete folder')</a></li>
+                                   <li class="uk-nav-divider"></li>
+                                   <li class="uk-danger"><a ng-click="action('remove', folder)" title="@lang('Delete folder')"><i class="uk-icon-minus-circle"></i> @lang('Delete folder')</a></li>
                                </ul>
                            </div>
                        </div>
@@ -188,7 +189,8 @@
                                    <li><a ng-click="addBookmark(file)" title="@lang('Bookmark file')"><i class="uk-icon-star"></i> @lang('Bookmark file')</a></li>
                                    <li><a ng-click="action('rename', file)" title="@lang('Rename file')"><i class="uk-icon-text-width"></i> @lang('Rename file')</a></li>
                                    <li><a ng-click="action('download', file)" title="@lang('Download file')"><i class="uk-icon-paperclip"></i> @lang('Download file')</a></li>
-                                   <li><a ng-click="action('remove', file)" title="@lang('Delete file')"><i class="uk-icon-minus-circle"></i> @lang('Delete file')</a></li>
+                                   <li class="uk-nav-divider"></li>
+                                   <li class="uk-danger"><a ng-click="action('remove', file)" title="@lang('Delete file')"><i class="uk-icon-minus-circle"></i> @lang('Delete file')</a></li>
                                </ul>
                            </div>
                        </div>
@@ -209,7 +211,6 @@
 
 <div id="mm-image-preview" class="uk-modal">
     <div class="uk-modal-dialog">
-        <a class="uk-modal-close uk-close"></a>
         <div class="modal-content uk-text-center"></div>
     </div>
 </div>

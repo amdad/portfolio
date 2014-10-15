@@ -12,11 +12,13 @@ class Regions extends \Cockpit\Controller {
 
     public function region($id=null){
 
-        if(!$id && !$this->app->module("auth")->hasaccess("Regions", 'create.regions')) {
+        if (!$id && !$this->app->module("auth")->hasaccess("Regions", 'create.regions')) {
             return false;
         }
 
-        return $this->render("regions:views/region.php", compact('id'));
+        $locales = $this->app->db->getKey("cockpit/settings", "cockpit.locales", []);
+
+        return $this->render("regions:views/region.php", compact('id', 'locales'));
     }
 
 }

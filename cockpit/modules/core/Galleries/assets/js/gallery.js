@@ -1,6 +1,6 @@
 (function($){
 
-    App.module.controller("gallery", function($scope, $rootScope, $http, $timeout){
+    App.module.controller("gallery", function($scope, $rootScope, $http, $timeout, Contentfields){
 
         var id         = $("[data-ng-controller='gallery']").data("id"),
             dialog     = $.UIkit.modal("#meta-dialog"),
@@ -8,14 +8,15 @@
             media_base = COCKPIT_MEDIA_BASE_URL.replace(/^\/+|\/+$/g, ""),
             site2media = media_base.replace(site_base, "").replace(/^\/+|\/+$/g, "");
 
-        $scope.groups    = [];
-        $scope.metaimage = {};
+        $scope.groups        = [];
+        $scope.metaimage     = {};
+        $scope.contentfields = Contentfields.fields();
 
-        if(id) {
+        if (id) {
 
             $http.post(App.route("/api/galleries/findOne"), {filter: {"_id":id}}, {responseType:"json"}).success(function(data){
 
-                if(data && Object.keys(data).length) {
+                if (data && Object.keys(data).length) {
                     $scope.gallery = data;
                 }
 
@@ -48,13 +49,13 @@
 
             gallery.images.forEach(function(image){
                 gallery.fields.forEach(function(field){
-                    if(!image.data[field.name]) image.data[field.name] = "";
+                    if (!image.data[field.name]) image.data[field.name] = "";
                 });
             });
 
             $http.post(App.route("/api/galleries/save"), {"gallery": gallery}).success(function(data){
 
-                if(data && Object.keys(data).length) {
+                if (data && Object.keys(data).length) {
                     $scope.gallery = data;
                     App.notify(App.i18n.get("Gallery saved!"));
                 }
@@ -64,9 +65,9 @@
 
         $scope.importFromFolder = function(){
 
-            new PathPicker(function(path){
+            new CockpitPathPicker(function(path){
 
-                if(String(path).match(/\.(jpg|png|gif)$/i)){
+                if (String(path).match(/\.(jpg|png|gif)$/i)){
                     $scope.$apply(function(){
                         $scope.gallery.images.push({"path":path, data:{}});
                         App.notify(App.i18n.get("%s image(s) imported", 1));
@@ -81,8 +82,9 @@
 
                             data.files.forEach(function(file) {
 
-                                if(file.name.match(/\.(jpg|png|gif)$/i)) {
-                                    $scope.gallery.images.push({"path":"site:"+site2media+'/'+file.path, data:{}});
+                                if (file.name.match(/\.(jpg|png|gif)$/i)) {
+                                    var full_path = site2media ? site2media+'/'+file.path : file.path;
+                                    $scope.gallery.images.push({"path":"site:"+full_path, data:{}});
 
                                     count = count + 1;
                                 }
@@ -102,7 +104,7 @@
 
         $scope.selectImage = function(){
 
-            new PathPicker(function(path){
+            new CockpitPathPicker(function(path){
                 $scope.$apply(function(){
                     $scope.gallery.images.push({"path":path, data:{}});
                     App.notify(App.i18n.get("%s image(s) imported", 1));
@@ -130,7 +132,7 @@
 
         $scope.addfield = function(){
 
-            if(!$scope.gallery.fields) {
+            if (!$scope.gallery.fields) {
                 $scope.gallery.fields = [];
             }
 
@@ -145,10 +147,23 @@
 
             var index = $scope.gallery.fields.indexOf(field);
 
-            if(index > -1) {
+            if (index > -1) {
                 $scope.gallery.fields.splice(index, 1);
             }
 
+        };
+
+        $scope.switchFieldsForm = function(refresh) {
+
+            if (refresh) {
+                $scope.gallery.fields = angular.copy($scope.gallery.fields);
+            }
+
+            $scope.managefields = !$scope.managefields;
+        };
+
+        $scope.toggleOptions = function(index) {
+            $("#options-field-"+index).toggleClass('uk-hidden');
         };
 
         var imglist = $("#images-list").on("sortable-change",function(){
@@ -166,10 +181,10 @@
 
         // after sorting list
 
-        var list = $("#manage-fields-list").on("nestable-change", function(){
+        var list = $("#manage-fields-list").on("nestable-stop", function(){
             var fields = [];
 
-            list.children().each(function(){
+            list.children('.ng-scope').each(function(){
                 fields.push(angular.copy($(this).scope().field));
             });
 

@@ -33,8 +33,8 @@
 <div data-ng-controller="regions" ng-cloak>
 
     <nav class="uk-navbar uk-margin-large-bottom">
-        <span class="uk-navbar-brand">@lang('Regions')</span>
-        <div class="uk-navbar-content" data-ng-show="regions && regions.length">
+        <span class="uk-hidden-small uk-navbar-brand">@lang('Regions')</span>
+        <div class="uk-hidden-small uk-navbar-content" data-ng-show="regions && regions.length">
             <form class="uk-form uk-margin-remove uk-display-inline-block">
                 <div class="uk-form-icon">
                     <i class="uk-icon-filter"></i>
@@ -57,7 +57,7 @@
         </div>
     </nav>
 
-    <div class="uk-grid uk-grid-divider" data-uk-grid-match data-ng-show="regions && regions.length">
+    <div class="uk-grid uk-grid-divider" data-uk-grid-match data-ng-show="regions && regions.length" data-uk-grid-margin>
 
         <div class="uk-width-medium-1-4">
             <div class="uk-panel">
@@ -96,8 +96,8 @@
                 <span class="uk-badge app-badge">@@ (activegroup=='-all' ? "@lang('All regions')" : activegroup) @@</span>
             </div>
 
-            <div class="uk-grid uk-grid-small" data-uk-grid-margin data-uk-grid-match data-ng-if="regions && regions.length && mode=='list'">
-                <div class="uk-width-1-1 uk-width-medium-1-3" data-ng-repeat="region in regions track by region._id" data-ng-show="matchName(region.name) && inGroup(region.group)">
+            <div class="uk-grid uk-grid-small" data-uk-grid-match data-ng-if="regions && regions.length && mode=='list'">
+                <div class="uk-width-1-1 uk-width-medium-1-3 uk-grid-margin" data-ng-repeat="region in regions track by region._id" data-ng-show="matchName(region.name) && inGroup(region.group)">
 
                     <div class="app-panel">
 
@@ -108,12 +108,21 @@
                         </div>
 
                         <div class="app-panel-box docked-bottom">
-                            <span class="uk-button-group">
-                                <a class="uk-button uk-button-primary uk-button-small" href="@route('/regions/region')/@@ region._id @@" title="@lang('Edit region')" data-uk-tooltip="{pos:'bottom'}"><i class="uk-icon-pencil"></i></a>
-                                @hasaccess?("Regions", 'create.regions')
-                                <a class="uk-button uk-button-danger uk-button-small" data-ng-click="remove($index, region)" href="#" title="@lang('Delete region')" data-uk-tooltip="{pos:'bottom'}"><i class="uk-icon-minus-circle"></i></a>
-                                @end
-                            </span>
+
+
+                            <div class="uk-link" data-uk-dropdown="{mode:'click'}">
+                                <i class="uk-icon-bars"></i>
+                                <div class="uk-dropdown">
+                                    <ul class="uk-nav uk-nav-dropdown uk-nav-parent-icon">
+                                        <li><a href="@route('/regions/region')/@@ region._id @@"><i class="uk-icon-pencil"></i> @lang('Edit region')</a></li>
+                                        @hasaccess?("Regions", 'create.regions')
+                                        <li><li class="uk-nav-divider"></li>
+                                        <li><a data-ng-click="duplicate(region._id)" href="#"><i class="uk-icon-copy"></i> @lang('Duplicate region')</a></li>
+                                        <li class="uk-danger"><a data-ng-click="remove($index, region)" href="#"><i class="uk-icon-minus-circle"></i> @lang('Delete region')</a></li>
+                                        @end
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -134,9 +143,19 @@
                             <td>
                                 <a href="@route('/regions/region')/@@ region._id @@">@@ region.name @@</a>
                             </td>
-                            <td align="right">
+                            <td>
                                 @hasaccess?("Regions", 'create.regions')
-                                <a class="uk-text-danger" ng-click="remove($index, region)" href="#" title="@lang('Delete region')" data-uk-tooltip="{pos:'bottom'}"><i class="uk-icon-minus-circle js-ignore-select"></i></a>
+                                <div class="uk-link uk-float-right" data-uk-dropdown>
+                                    <i class="uk-icon-bars"></i>
+                                    <div class="uk-dropdown">
+                                        <ul class="uk-nav uk-nav-dropdown uk-nav-parent-icon">
+                                            <li><a href="@route('/regions/region')/@@ region._id @@"><i class="uk-icon-pencil"></i> @lang('Edit region')</a></li>
+                                            <li><li class="uk-nav-divider"></li>
+                                            <li><a data-ng-click="duplicate(region._id)" href="#"><i class="uk-icon-copy"></i> @lang('Duplicate region')</a></li>
+                                            <li class="uk-danger"><a data-ng-click="remove($index, region)" href="#"><i class="uk-icon-minus-circle"></i> @lang('Delete region')</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
                                 @end
                             </td>
                         </tr>

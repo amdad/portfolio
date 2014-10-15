@@ -2,15 +2,15 @@
 
 // API
 
-$app->bind("/api/forms/submit/:form", function($params) use($app){
+$app->bind("/api/forms/submit/:form", function($params) use($app) {
 
     $form = $params["form"];
 
     // Security check
 
-    if ($formhash = $app->param("__csrf", false)) {
+    if ($formhash = $this->param("__csrf", false)) {
 
-        if ($formhash != $app->hash($form)) {
+        if ($formhash != $this->hash($form)) {
             return false;
         }
 
@@ -18,20 +18,20 @@ $app->bind("/api/forms/submit/:form", function($params) use($app){
         return false;
     }
 
-    $frm = $app->db->findOne("common/forms", ["name"=>$form]);
+    $frm = $this->db->findOne("common/forms", ["name"=>$form]);
 
     if (!$frm) {
         return false;
     }
 
-    if ($formdata = $app->param("form", false)) {
+    if ($formdata = $this->param("form", false)) {
 
         // custom form validation
-        if ($app->path("custom:forms/{$form}.php") && false===include($app->path("custom:forms/{$form}.php"))) {
+        if ($this->path("custom:forms/{$form}.php") && false===include($this->path("custom:forms/{$form}.php"))) {
             return false;
         }
 
-        if(isset($frm["email"])) {
+        if (isset($frm["email"])) {
 
             $emails          = array_map('trim', explode(',', $frm['email']));
             $filtered_emails = [];
@@ -39,7 +39,7 @@ $app->bind("/api/forms/submit/:form", function($params) use($app){
             foreach($emails as $to){
 
                 // Validate each email address individually, push if valid
-                if(filter_var($to, FILTER_VALIDATE_EMAIL)){
+                if (filter_var($to, FILTER_VALIDATE_EMAIL)){
                     $filtered_emails[] = $to;
                 }
             }
@@ -55,7 +55,9 @@ $app->bind("/api/forms/submit/:form", function($params) use($app){
                     $body[] = (is_string($value) ? $value:json_encode($value))."\n<br>";
                 }
 
-                $app->mailer->mail($frm["email"], $app->param("__mailsubject", "New form data for: ".$form), implode("\n<br>", $body));
+                $options = $this->param("form_options", []);
+
+                $this->mailer->mail($frm["email"], $this->param("__mailsubject", "New form data for: ".$form), implode("\n<br>", $body), $options);
             }
         }
 
@@ -63,7 +65,7 @@ $app->bind("/api/forms/submit/:form", function($params) use($app){
 
             $collection = "form".$frm["_id"];
             $entry      = ["data" => $formdata, "created"=>time()];
-            $app->db->insert("forms/{$collection}", $entry);
+            $this->db->insert("forms/{$collection}", $entry);
         }
 
         return json_encode($formdata);
@@ -74,7 +76,23 @@ $app->bind("/api/forms/submit/:form", function($params) use($app){
 
 });
 
+
 $this->module("forms")->extend([
+
+    "get_form" => function($name) use($app) {
+
+        static $forms;
+
+        if (null === $forms) {
+            $forms = [];
+        }
+
+        if (!isset($forms[$name])) {
+            $forms[$name] = $app->db->findOne("common/forms", ["name"=>$name]);
+        }
+
+        return $forms[$name];
+    },
 
     "form" => function($name, $options = []) use($app) {
 
@@ -96,13 +114,13 @@ $this->module("forms")->extend([
 
     "entries" => function($name) use($app) {
 
-        $frm = $app->db->findOne("common/forms", ["name"=>$name]);
+        $form = $this->get_form($name);
 
-        if (!$frm) {
+        if (!$form) {
             return false;
         }
 
-        $entrydb = "form".$frm["_id"];
+        $entrydb = "form".$form["_id"];
 
         return $app->db->getCollection("forms/{$entrydb}");
     }
@@ -117,48 +135,4 @@ if (!function_exists('form')) {
 }
 
 // ADMIN
-
-if(COCKPIT_ADMIN && !COCKPIT_REST) {
-
-    $app->on("admin.init", function() use($app){
-
-        if(!$app->module("auth")->hasaccess("Forms", ['manage.forms', 'manage.entries'])) return;
-
-        $app->bindClass("Forms\\Controller\\Forms", "forms");
-        $app->bindClass("Forms\\Controller\\Api", "api/forms");
-
-        $app("admin")->menu("top", [
-            "url"    => $app->routeUrl("/forms"),
-            "label"  => '<i class="uk-icon-inbox"></i>',
-            "title"  => $app("i18n")->get("Forms"),
-            "active" => (strpos($app["route"], '/forms') === 0)
-        ], 5);
-
-        // handle global search request
-        $app->on("cockpit.globalsearch", function($search, $list) use($app){
-
-            foreach ($app->db->find("common/forms") as $f) {
-                if(stripos($f["name"], $search)!==false){
-                    $list[] = [
-                        "title" => '<i class="uk-icon-inbox"></i> '.$f["name"],
-                        "url"   => $app->routeUrl('/forms/form/'.$f["_id"])
-                    ];
-                }
-            }
-        });
-    });
-
-    $app->on("admin.dashboard.aside", function() use($app){
-
-        if(!$app->module("auth")->hasaccess("Forms", ['manage.forms', 'manage.entries'])) return;
-
-        $title = $app("i18n")->get("Forms");
-        $badge = $app->db->getCollection("common/forms")->count();
-        $forms = $app->db->find("common/forms", ["limit"=> 3, "sort"=>["created"=>-1] ])->toArray();
-
-        $app->renderView("forms:views/dashboard.php with cockpit:views/layouts/dashboard.widget.php", compact('title', 'badge', 'forms'));
-    });
-
-    // acl
-    $app("acl")->addResource("Forms", ['manage.forms', 'manage.entries']);
-}
+if (COCKPIT_ADMIN && !COCKPIT_REST) include_once(__DIR__.'/admin.php');

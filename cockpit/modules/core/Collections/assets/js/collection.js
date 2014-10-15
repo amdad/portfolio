@@ -1,14 +1,14 @@
 (function($){
 
-    App.module.controller("collection", function($scope, $rootScope, $http){
+    App.module.controller("collection", function($scope, $rootScope, $http, $timeout, Contentfields){
 
         var id = $("[data-ng-controller='collection']").data("id");
 
-        if(id) {
+        if (id) {
 
             $http.post(App.route("/api/collections/findOne"), {filter: {"_id":id}}, {responseType:"json"}).success(function(data){
 
-                if(data && Object.keys(data).length) {
+                if (data && Object.keys(data).length) {
                     $scope.collection = data;
                 }
 
@@ -24,8 +24,9 @@
             };
         }
 
-        $scope.collections = [];
-        $scope.groups      = [];
+        $scope.collections   = [];
+        $scope.groups        = [];
+        $scope.contentfields = Contentfields.fields();
 
         // get collections
         $http.post(App.route("/api/collections/find"), {}).success(function(data){
@@ -41,7 +42,7 @@
 
         $scope.addfield = function(){
 
-            if(!$scope.collection.fields) {
+            if (!$scope.collection.fields) {
                 $scope.collection.fields = [];
             }
 
@@ -57,10 +58,9 @@
 
             var index = $scope.collection.fields.indexOf(field);
 
-            if(index > -1) {
+            if (index > -1) {
                 $scope.collection.fields.splice(index, 1);
             }
-
         };
 
         $scope.toggleOptions = function(index) {
@@ -73,7 +73,7 @@
 
             $http.post(App.route("/api/collections/save"), {"collection": collection}).success(function(data){
 
-                if(data && Object.keys(data).length) {
+                if (data && Object.keys(data).length) {
                     $scope.collection._id = data._id;
                     App.notify(App.i18n.get("Collection saved!"), "success");
                 }
@@ -81,18 +81,27 @@
             }).error(App.module.callbacks.error.http);
         };
 
-        $scope.getSortFields = function() {
+        $scope.$watch('collection.fields', function() {
 
-            return [{'name':'created'}, {'name':'modified'}].concat($scope.collection && $scope.collection.fields ? angular.copy($scope.collection.fields):[]);
-        }
+            var sortfields = [{name: 'created', label:'created'}, {name: 'modified', label:'modified'}, {name:'custom-order', label:'custom'}];
+
+            if ($scope.collection && $scope.collection.fields) {
+                sortfields = sortfields.concat($scope.collection && $scope.collection.fields ? angular.copy($scope.collection.fields):[]);
+            }
+
+            $timeout(function() {
+                $scope.sortfields = sortfields;
+            });
+
+        }, true);
 
         // after sorting list
         $(function(){
 
-            var list = $("#fields-list").on("nestable-change", function(){
+            var list = $("#fields-list").on("nestable-stop", function(){
                 var fields = [];
 
-                list.children().each(function(){
+                list.children('.ng-scope').each(function(){
                     fields.push(angular.copy($(this).scope().field));
                 });
 

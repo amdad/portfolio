@@ -34,8 +34,8 @@
 <div data-ng-controller="galleries" ng-cloak>
 
     <nav class="uk-navbar uk-margin-large-bottom">
-        <span class="uk-navbar-brand">@lang('Galleries')</span>
-        <div class="uk-navbar-content" data-ng-show="galleries && galleries.length">
+        <span class="uk-hidden-small uk-navbar-brand">@lang('Galleries')</span>
+        <div class="uk-hidden-small uk-navbar-content" data-ng-show="galleries && galleries.length">
             <form class="uk-form uk-margin-remove uk-display-inline-block">
                 <div class="uk-form-icon">
                     <i class="uk-icon-filter"></i>
@@ -58,7 +58,7 @@
         </div>
     </nav>
 
-    <div class="uk-grid uk-grid-divider" data-uk-grid-match data-ng-show="galleries && galleries.length">
+    <div class="uk-grid uk-grid-divider" data-uk-grid-margin data-ng-show="galleries && galleries.length">
 
         <div class="uk-width-medium-1-4">
             <div class="uk-panel">
@@ -97,8 +97,8 @@
                 <span class="uk-badge app-badge">@@ (activegroup=='-all' ? '@lang("All galleries")' : activegroup) @@</span>
             </div>
 
-            <div class="uk-grid uk-grid-small" data-uk-grid-margin data-uk-grid-match data-ng-if="galleries && galleries.length && mode=='list'">
-                <div class="uk-width-1-1 uk-width-medium-1-3" data-ng-repeat="gallery in galleries track by gallery._id" data-ng-show="matchName(gallery.name) && inGroup(gallery.group)">
+            <div class="uk-grid uk-grid-small" data-uk-grid-match data-ng-if="galleries && galleries.length && mode=='list'">
+                <div class="uk-width-1-1 uk-width-medium-1-3 uk-grid-margin" data-ng-repeat="gallery in galleries track by gallery._id" data-ng-show="matchName(gallery.name) && inGroup(gallery.group)">
 
                     <div class="app-panel">
 
@@ -115,12 +115,19 @@
                         </div>
 
                         <div class="app-panel-box docked-bottom">
-                            <span class="uk-button-group">
-                                <a class="uk-button uk-button-primary uk-button-small" href="@route('/galleries/gallery')/@@ gallery._id @@" title="@lang('Edit gallery')" data-uk-tooltip="{pos:'bottom'}"><i class="uk-icon-pencil"></i></a>
-                                @hasaccess?("Galleries", 'create.gallery')
-                                <a class="uk-button uk-button-danger uk-button-small" data-ng-click="remove($index, gallery)" href="#" title="@lang('Delete gallery')" data-uk-tooltip="{pos:'bottom'}"><i class="uk-icon-minus-circle"></i></a>
-                                @end
-                            </span>
+
+                            <div class="uk-link" data-uk-dropdown="{mode:'click'}">
+                                <i class="uk-icon-bars"></i>
+                                <div class="uk-dropdown">
+                                    <ul class="uk-nav uk-nav-dropdown uk-nav-parent-icon">
+                                        <li><a href="@route('/galleries/gallery')/@@ gallery._id @@"><i class="uk-icon-pencil"></i> @lang('Edit gallery')</a></li>
+                                        @hasaccess?("Galleries", 'create.gallery')
+                                        <li class="uk-nav-divider"></li>
+                                        <li class="uk-danger"><a data-ng-click="remove($index, gallery)" href="#"><i class="uk-icon-minus-circle"></i> @lang('Delete gallery')</a></li>
+                                        @end
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

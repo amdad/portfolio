@@ -21,7 +21,7 @@ $this->module("auth")->extend([
             "active"   => 1
         ]);
 
-        if(count($user)) {
+        if (count($user)) {
 
             $user = array_merge($data, (array)$user);
 
@@ -49,10 +49,10 @@ $this->module("auth")->extend([
 
         $user = $app("session")->read("cockpit.app.auth");
 
-        if(isset($user["group"])) {
+        if (isset($user["group"])) {
 
-            if($user["group"]=='admin') return true;
-            if($app("acl")->hasaccess($user["group"], $resource, $action)) return true;
+            if ($user["group"]=='admin') return true;
+            if ($app("acl")->hasaccess($user["group"], $resource, $action)) return true;
         }
 
         return false;
@@ -60,8 +60,8 @@ $this->module("auth")->extend([
 
     "getGroupSetting" => function($setting, $default = null) use($app) {
 
-        if($user = $app("session")->read("cockpit.app.auth", null)) {
-            if(isset($user["group"])) {
+        if ($user = $app("session")->read("cockpit.app.auth", null)) {
+            if (isset($user["group"])) {
 
                 $settings = $app["cockpit.acl.groups.settings"];
 
@@ -74,42 +74,5 @@ $this->module("auth")->extend([
 ]);
 
 
-if (COCKPIT_ADMIN) {
-
-    // extend lexy parser
-    $app->renderer()->extend(function($content){
-
-        $content = preg_replace('/(\s*)@hasaccess\?\((.+?)\)/', '$1<?php if($app->module("auth")->hasaccess($2)) { ?>', $content);
-
-        return $content;
-    });
-
-    // register controller
-
-    $app->bindClass("Auth\\Controller\\Auth", 'auth');
-    $app->bindClass("Auth\\Controller\\Accounts", "accounts");
-
-    // init acl
-
-    $app["cockpit.acl.groups.settings"] = $app->memory->get("cockpit.acl.groups.settings", new \ArrayObject([]));
-
-    $app("acl")->addGroup("admin", true);
-
-    if($user = $app->module("auth")->getUser()) {
-
-        foreach ($app->memory->get("cockpit.acl.groups", []) as $group => $isadmin) {
-            $app("acl")->addGroup($group, $isadmin);
-        }
-
-        foreach ($app->memory->get("cockpit.acl.rights", []) as $group => $resources) {
-
-            if (!$app("acl")->hasGroup($group)) continue;
-
-            foreach ($resources as $resource => $actions) {
-                foreach ($actions as $action => $value) {
-                    if ($value) $app("acl")->allow($group, $resource, $action);
-                }
-            }
-        }
-    }
-}
+// ADMIN
+if (COCKPIT_ADMIN && !COCKPIT_REST) include_once(__DIR__.'/admin.php');

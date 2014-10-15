@@ -1,5 +1,71 @@
 # Changelog
 
+### 0.11.3  (Oct 1, 2014)
+
+    # Fixed gallery pathpicker js error
+
+### 0.11.2  (Oct 1, 2014)
+
+    # Fixed collection link field on locale change
+    # Fixed 404 error on empty string output
+    # Fixed Backups download
+
+### 0.11.1  (Sep 2, 2014)
+
+    ^ Extracted Backups to standalone core module
+    ^ Decoupled module fields from core content fields
+    # Fixed Parsedown extra parameter
+    # Fixed install screen
+
+### 0.11.0  (Sep 14, 2014)
+
+    + Added Datastore module for simple embedded data storage
+    + Added uikit less sources to easily rebuild admin theme
+    + Added ParsedownExtra class
+    + Added multiple api tokens supporting custom url rules
+    + Custom bootstrap file support (/custom/bootstrap.php)
+    + Empty collection action
+    ^ Add title for each image in a gallery field
+    ^ Custom config.php moved to /custom/config.php
+    ^ Language files are now loaded from /custom/i18n
+    ^ Improved auto-updater
+    # Fixed collection entries filtering for mongodb based installations
+
+### 0.10.0  (Sep 04, 2014)
+
+    + Added auto-updater (experimental)
+    + Added location field
+    + Added backup options (backup site or cockpit folder)
+    + Added shorthand modules method call e.g. cockpit('regions:render', 'test');
+    + Added auto slugs for collection, region and gallery names
+    ^ Iimproved sluggify functionality, thanks @doctorjuta
+    ^ Regions api extended
+    ^ Localize option for any field
+    # Check whether headers module is enabled in .htaccess (apache)
+
+### 0.9.18  (Aug 31, 2014)
+
+    + Added duplicate collections and regions
+    + Added usage nice urls for the backend (if possible)
+    + Added custom order via drag'n drop for collection entries
+    + Added multilanguage support for content fields
+    + Added Cross-Origin-Resource-Sharing headers to htaccess to allow extern access (e.g. mobile apps)
+    + Added .htaccess to auto optimize apache based webservers
+    + Added thumbnails api function
+    + Added collection_populate_one api function
+    ^ Updated assets + libs
+    ^ Updated allow underscores in field names
+    ^ Updated group settings moved to main storage (!important: group settings may get lost after update)
+    ^ Updated allow using not latin letters in region & collection name field
+    ^ Updated Lexy renderer refactored to service
+    ^ Updated moved view caching to lexy class
+    # Fixed MongoDB error on collection entries index page
+    # Fixed notices in CLI mode @naumovs
+    # Fixed Form disabled when not valid (form add-on)
+    # Fixed cache empty assets @kinolaev
+    # Fixed Galleries: Thumbnails of images added from folder aren't displayed @kinolaev
+    - Removed $_SERVER['PATH_INFO'] dependency
+
 ### 0.9.17  (Jul 13, 2014)
 
     + Added new api function "collection_populate" to populate linked collection items
