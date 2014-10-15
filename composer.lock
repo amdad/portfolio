@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "431a50cc130705fab94f99776a1e227d",
+    "hash": "33f86a70e137cb8f3a5e2f7aba12783e",
     "packages": [
         {
             "name": "dg/twitter-php",
@@ -132,22 +132,27 @@
         },
         {
             "name": "raveren/kint",
-            "version": "v0.9",
+            "version": "v0.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/raveren/kint.git",
-                "reference": "ada810111ced4e3a926b4040da9b86442e43b613"
+                "reference": "d4780fc6e974f00c427c1fd2492dca4dcd636704"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/raveren/kint/zipball/ada810111ced4e3a926b4040da9b86442e43b613",
-                "reference": "ada810111ced4e3a926b4040da9b86442e43b613",
+                "url": "https://api.github.com/repos/raveren/kint/zipball/d4780fc6e974f00c427c1fd2492dca4dcd636704",
+                "reference": "d4780fc6e974f00c427c1fd2492dca4dcd636704",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.9-dev"
+                }
+            },
             "autoload": {
                 "files": [
                     "Kint.class.php"
@@ -174,7 +179,7 @@
                 "kint",
                 "php"
             ],
-            "time": "2013-08-12 22:46:16"
+            "time": "2014-08-11 11:44:51"
         },
         {
             "name": "silex/silex",
